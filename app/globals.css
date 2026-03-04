@@ -4,13 +4,14 @@
 
 /* ─── Tokens ──────────────────────────────────────────────── */
 :root {
-  --bg:       #FFFFFF;
-  --text:     #0A0A0A;
-  --muted:    #8A8A8A;
-  --border:   #E8E8E8;
-  --accent:   #0047FF;
-  --font:     var(--font-syne), 'Syne', system-ui, sans-serif;
-  --pad:      clamp(24px, 5vw, 64px);
+  --bg:        #FFFFFF;
+  --text:      #0A0A0A;
+  --muted:     #8A8A8A;
+  --border:    #E8E8E8;
+  --accent:    #0047FF;
+  --font:      var(--font-syne), 'Syne', system-ui, sans-serif;
+  --pad:       clamp(24px, 5vw, 64px);
+  --footer-h:  60px;
 }
 
 /* ─── Reset ───────────────────────────────────────────────── */
@@ -21,7 +22,12 @@
 }
 
 /* ─── Base ────────────────────────────────────────────────── */
-html, body {
+html {
+  /* Use dynamic viewport height so mobile browser chrome is excluded */
+  height: 100%;
+}
+
+body {
   background: var(--bg);
   color: var(--text);
   font-family: var(--font);
@@ -29,6 +35,8 @@ html, body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* Reserve space for fixed footer */
+  padding-bottom: var(--footer-h);
 }
 
 a {
@@ -43,7 +51,7 @@ ul { list-style: none; }
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 22px var(--pad);
+  padding: 20px var(--pad);
   border-bottom: 1px solid var(--border);
   animation: fadein 0.4s ease both;
 }
@@ -57,7 +65,7 @@ ul { list-style: none; }
 
 .nav-links {
   display: flex;
-  gap: 28px;
+  gap: 24px;
   font-size: 13px;
   font-weight: 500;
   color: var(--muted);
@@ -85,13 +93,13 @@ ul { list-style: none; }
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  gap: 28px;
-  padding: 48px var(--pad) 52px;
+  gap: 24px;
+  padding: 48px var(--pad) 48px;
   border-right: 1px solid var(--border);
 }
 
 h1 {
-  font-size: clamp(64px, 9vw, 104px);
+  font-size: clamp(60px, 9vw, 104px);
   font-weight: 800;
   letter-spacing: -0.04em;
   line-height: 0.9;
@@ -110,7 +118,7 @@ h1 {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 48px var(--pad) 52px;
+  padding: 48px var(--pad) 48px;
   gap: 20px;
 }
 
@@ -133,6 +141,7 @@ h1 {
   gap: 14px;
   padding: 16px 0;
   border-top: 1px solid var(--border);
+  /* Smooth indent on hover */
   transition: padding-left 0.18s ease;
 }
 
@@ -195,9 +204,9 @@ h1 {
   align-items: center;
   gap: 20px;
   white-space: nowrap;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: #FFFFFF;
   padding-right: 20px;
@@ -302,12 +311,20 @@ h1 {
   flex-shrink: 0;
 }
 
-/* ─── Footer ──────────────────────────────────────────────── */
+/* ─── Footer — fixed to bottom of viewport ────────────────── */
 .footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--footer-h);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 22px var(--pad);
+  padding: 0 var(--pad);
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  z-index: 100;
   animation: fadein 0.5s 0.2s ease both;
 }
 
@@ -343,8 +360,10 @@ h1 {
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* ─── Responsive ──────────────────────────────────────────── */
+/* ─── Mobile — iPhone 12 and similar (≤ 680px) ───────────── */
 @media (max-width: 680px) {
+
+  /* Hero stacks vertically */
   .hero {
     grid-template-columns: 1fr;
     min-height: unset;
@@ -353,25 +372,92 @@ h1 {
   .hero-left {
     border-right: none;
     border-bottom: 1px solid var(--border);
-    padding-bottom: 40px;
+    padding: 40px var(--pad) 36px;
+    gap: 20px;
   }
 
   .hero-right {
-    padding-top: 36px;
+    padding: 32px var(--pad) 36px;
+    gap: 16px;
   }
 
+  /* Bigger touch targets for project list */
+  .project-item {
+    padding: 18px 0;
+    /* Disable the indent shift on touch devices */
+    transition: none;
+  }
+
+  .project-item:hover {
+    padding-left: 0;
+  }
+
+  .pi-name {
+    font-size: 20px;
+  }
+
+  /* Work items: stack meta above content */
   .work-item {
-    flex-wrap: wrap;
-    gap: 12px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    padding: 28px var(--pad);
+  }
+
+  .wi-meta {
+    flex-direction: row;
+    align-items: center;
+    width: auto;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .wi-content {
+    width: 100%;
+  }
+
+  .wi-name {
+    font-size: 22px;
+    margin-bottom: 6px;
+  }
+
+  .wi-desc {
+    font-size: 14px;
   }
 
   .wi-arrow {
     display: none;
   }
 
+  /* Footer: show on one line, smaller text */
   .footer {
-    flex-direction: column;
-    gap: 10px;
-    align-items: flex-start;
+    padding: 0 var(--pad);
+  }
+
+  .footer-copy {
+    font-size: 12px;
+  }
+
+  .footer-links {
+    font-size: 12px;
+  }
+}
+
+/* ─── Narrow phones (≤ 390px, e.g. iPhone 12) ────────────── */
+@media (max-width: 390px) {
+  :root {
+    --pad: 20px;
+  }
+
+  .nav-links {
+    gap: 16px;
+  }
+
+  h1 {
+    font-size: 56px;
+  }
+
+  .bio {
+    font-size: 15px;
   }
 }
