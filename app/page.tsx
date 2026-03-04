@@ -31,60 +31,112 @@ const socials = [
   { label: "linkedin", url: "https://www.linkedin.com/in/siwankim/" },
 ];
 
+const tickerItems = [
+  "Builder & indie hacker",
+  "Shipping AI tools",
+  "FarmPosts",
+  "DocAPI",
+  "US Kids Golf Status",
+  "Always building",
+  "siwan.io",
+];
+
 export default function Home() {
   return (
-    <main>
-      <div className="container">
-        {/* Header */}
-        <header>
-          <div className="name-row">
-            <h1>siwan kim</h1>
-            <span className="cursor" aria-hidden="true">_</span>
-          </div>
+    <>
+      {/* Nav */}
+      <nav className="nav">
+        <span className="nav-logo">siwan.io</span>
+        <div className="nav-links">
+          {socials.map((s) => (
+            <a key={s.label} href={s.url} target="_blank" rel="noopener noreferrer">
+              {s.label}
+            </a>
+          ))}
+        </div>
+      </nav>
+
+      {/* Hero */}
+      <div className="hero">
+        <div className="hero-left">
+          <h1>
+            siwan<br />kim.
+          </h1>
           <p className="bio">
             builder &amp; indie hacker. shipping things at the intersection of AI and useful tools.
           </p>
-        </header>
+        </div>
 
-        {/* Projects */}
-        <section>
-          <span className="section-label">// projects</span>
-          <div className="projects">
+        <div className="hero-right">
+          <p className="projects-label">Selected Projects</p>
+          <ul className="project-list">
             {projects.map((p) => (
-              <a
-                key={p.id}
-                href={p.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="project"
-              >
-                <div className="project-header">
-                  <span className="project-id">{p.id}</span>
-                  <span className="project-name">{p.name}</span>
-                  <span className="project-tag">{p.tag}</span>
-                  <span className="project-arrow">↗</span>
-                </div>
-                <p className="project-desc">{p.description}</p>
-              </a>
-            ))}
-          </div>
-        </section>
-
-        {/* Footer */}
-        <footer>
-          <span className="section-label">// links</span>
-          <div className="socials">
-            {socials.map((s, i) => (
-              <span key={s.label}>
-                <a href={s.url} target="_blank" rel="noopener noreferrer">
-                  {s.label}
+              <li key={p.id}>
+                <a
+                  href={p.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="project-item"
+                >
+                  <span className="pi-num">{p.id}</span>
+                  <span className="pi-name">{p.name}</span>
+                  <span className="pi-arrow">→</span>
                 </a>
-                {i < socials.length - 1 && <span className="sep"> · </span>}
-              </span>
+              </li>
             ))}
-          </div>
-        </footer>
+          </ul>
+        </div>
       </div>
-    </main>
+
+      {/* Scrolling ticker */}
+      <div className="ticker" aria-hidden="true">
+        <div className="ticker-track">
+          {[...tickerItems, ...tickerItems].map((item, i) => (
+            <span key={i} className="ticker-item">
+              {item}
+              <span className="ticker-sep">✦</span>
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* Project detail rows */}
+      <section className="work">
+        {projects.map((p) => (
+          <a
+            key={p.id}
+            href={p.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="work-item"
+          >
+            <div className="wi-meta">
+              <span className="wi-num">{p.id}</span>
+              <span className="wi-tag">{p.tag}</span>
+            </div>
+            <div className="wi-content">
+              <h3 className="wi-name">{p.name}</h3>
+              <p className="wi-desc">{p.description}</p>
+            </div>
+            <span className="wi-arrow">↗</span>
+          </a>
+        ))}
+      </section>
+
+      {/* Footer */}
+      <footer className="footer">
+        <span className="footer-copy">© 2026 siwan kim</span>
+        <div className="footer-links">
+          {socials.map((s, i) => (
+            <span key={s.label}>
+              <a href={s.url} target="_blank" rel="noopener noreferrer">
+                {s.label}
+              </a>
+              {i < socials.length - 1 && <span className="sep"> / </span>}
+            </span>
+          ))}
+        </div>
+      </footer>
+    </>
   );
 }
