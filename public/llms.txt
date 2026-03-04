@@ -1,0 +1,33 @@
+# Siwan Kim — siwan.io
+
+> Builder and indie hacker. Shipping AI tools and developer infrastructure at the intersection of AI and useful products.
+
+Siwan Kim is a software developer and indie hacker based in 2026, known for building agentic-first APIs, AI SaaS tools, and developer utilities. He is the creator of DocAPI (agent-native HTML-to-PDF API with USDC billing), FarmPosts (AI content platform for real estate agents), ShipLoud (a public building community for indie hackers), and US Kids Golf Status.
+
+His writing covers shipping products publicly, overcoming the fear of launching, agentic API design, autonomous payments with USDC and Coinbase AgentKit, and indie hacking.
+
+## Core expertise
+
+- Agentic-first API design (programmatic registration, USDC billing, HTTP 402 prevention)
+- Autonomous agent payments via Coinbase AgentKit and USDC on Base mainnet
+- Building and shipping indie products fast
+- Building in public and launching before you're ready
+
+## Projects
+
+- [DocAPI](https://docapi.co): HTML-to-PDF and screenshot API designed for AI agents. Agent-native registration (one POST request, no OAuth), pay-per-use via USDC on Base mainnet, credit management via X-Credits-Remaining header.
+- [FarmPosts](https://farmposts.com): AI content platform for real estate agents generating weekly posts, emails, and video scripts from live market data.
+- [ShipLoud](https://shiploud.co): Community platform for indie hackers to build and ship publicly.
+- [US Kids Golf Status](https://uskidsgolfstatus.com): Priority status lookup tool for US Kids Golf tournament families.
+
+## Writing
+
+- [Why I'm Bullish on Agentic-First APIs](https://siwan.io/blog/agentic-first-apis): Agents are becoming the primary API consumers. Most APIs aren't built for them — no programmatic registration, no crypto billing, no credit headers. DocAPI was built to solve this. Covers the registration problem, USDC billing via Coinbase AgentKit, making HTTP 402 structurally impossible, and software that funds itself.
+- [Shipping Before You're Ready](https://siwan.io/blog/shipping-before-ready): How shipping DocAPI on Hacker News before it was perfect led to better feedback than months of preparation would have. The "perfect version" is a trap. Ship the shippable version.
+- [Why I Build in Public](https://siwan.io/blog/building-in-public): Two years of building in public — accountability, feedback flywheels, compounding identity, and what to actually share.
+
+## Contact
+
+- X/Twitter: https://x.com/0xSiwan
+- LinkedIn: https://www.linkedin.com/in/siwankim/
+- Threads: https://www.threads.com/@codingbarista

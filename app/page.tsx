@@ -1,3 +1,6 @@
+import Link from "next/link";
+import { getAllPosts, formatDate } from "@/lib/blog";
+
 const projects = [
   {
     id: "01",
@@ -51,14 +54,22 @@ const tickerItems = [
 ];
 
 export default function Home() {
+  const recentPosts = getAllPosts().slice(0, 3);
+
   return (
     <>
       {/* Nav */}
       <nav className="nav">
         <span className="nav-logo">siwan.io</span>
         <div className="nav-links">
+          <Link href="/blog">writing</Link>
           {socials.map((s) => (
-            <a key={s.label} href={s.url} target="_blank" rel="noopener noreferrer">
+            <a
+              key={s.label}
+              href={s.url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               {s.label}
             </a>
           ))}
@@ -69,10 +80,13 @@ export default function Home() {
       <div className="hero">
         <div className="hero-left">
           <h1>
-            siwan<br />kim.
+            Siwan
+            <br />
+            <span className="accent">Kim.</span>
           </h1>
           <p className="bio">
-            builder &amp; indie hacker. shipping things at the intersection of AI and useful tools.
+            builder &amp; indie hacker. shipping things at the intersection of
+            AI and useful tools.
           </p>
         </div>
 
@@ -131,6 +145,32 @@ export default function Home() {
           </a>
         ))}
       </section>
+
+      {/* Writing */}
+      {recentPosts.length > 0 && (
+        <section className="writing">
+          <div className="writing-header">
+            <p className="projects-label">Recent Writing</p>
+            <Link href="/blog" className="writing-all">
+              all posts →
+            </Link>
+          </div>
+          {recentPosts.map((post) => (
+            <Link
+              key={post.slug}
+              href={`/blog/${post.slug}`}
+              className="blog-item"
+            >
+              <div className="bi-date">{formatDate(post.date)}</div>
+              <div className="bi-content">
+                <h3 className="bi-title">{post.title}</h3>
+                <p className="bi-desc">{post.description}</p>
+              </div>
+              <span className="wi-arrow">→</span>
+            </Link>
+          ))}
+        </section>
+      )}
 
       {/* Footer */}
       <footer className="footer">

@@ -15,12 +15,24 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://siwan.io"),
   title: "Siwan Kim",
   description: "Builder. Shipping things at the intersection of AI and useful tools.",
   openGraph: {
     title: "Siwan Kim",
     description: "Builder. Shipping things at the intersection of AI and useful tools.",
     url: "https://siwan.io",
+    siteName: "Siwan Kim",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    creator: "@0xSiwan",
+    site: "@0xSiwan",
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 

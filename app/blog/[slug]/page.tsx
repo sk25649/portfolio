@@ -1,0 +1,126 @@
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import { getAllPostSlugs, getPostBySlug, formatDate } from '@/lib/blog';
+import { MDXContent } from '@/components/blog/MDXContent';
+import type { Metadata } from 'next';
+
+interface Props {
+  params: Promise<{ slug: string }>;
+}
+
+export async function generateStaticParams() {
+  return getAllPostSlugs().map((slug) => ({ slug }));
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const post = getPostBySlug(slug);
+  if (!post) return {};
+  const url = `https://siwan.io/blog/${slug}`;
+  return {
+    title: `${post.title} — Siwan Kim`,
+    description: post.description,
+    alternates: { canonical: url },
+    openGraph: {
+      title: post.title,
+      description: post.description,
+      type: 'article',
+      publishedTime: post.date,
+      url,
+      authors: ['Siwan Kim'],
+      siteName: 'Siwan Kim',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.description,
+      creator: '@0xSiwan',
+    },
+  };
+}
+
+const socials = [
+  { label: 'x', url: 'https://x.com/0xSiwan' },
+  { label: 'threads', url: 'https://www.threads.com/@codingbarista' },
+  { label: 'linkedin', url: 'https://www.linkedin.com/in/siwankim/' },
+];
+
+export default async function BlogPostPage({ params }: Props) {
+  const { slug } = await params;
+  const post = getPostBySlug(slug);
+  if (!post) notFound();
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: post.title,
+    description: post.description,
+    datePublished: post.date,
+    author: {
+      '@type': 'Person',
+      name: 'Siwan Kim',
+      url: 'https://siwan.io',
+      sameAs: [
+        'https://x.com/0xSiwan',
+        'https://www.linkedin.com/in/siwankim/',
+      ],
+    },
+    publisher: {
+      '@type': 'Person',
+      name: 'Siwan Kim',
+      url: 'https://siwan.io',
+    },
+    url: `https://siwan.io/blog/${slug}`,
+    mainEntityOfPage: `https://siwan.io/blog/${slug}`,
+  };
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <nav className="nav">
+        <Link href="/" className="nav-logo">siwan.io</Link>
+        <div className="nav-links">
+          <Link href="/blog">writing</Link>
+          {socials.map((s) => (
+            <a key={s.label} href={s.url} target="_blank" rel="noopener noreferrer">
+              {s.label}
+            </a>
+          ))}
+        </div>
+      </nav>
+
+      <div className="post-hero">
+        <p className="post-eyebrow">
+          {formatDate(post.date)} &nbsp;·&nbsp; {post.readingTime}
+        </p>
+        <h1 className="post-title">{post.title}</h1>
+        <p className="post-desc">{post.description}</p>
+      </div>
+
+      <article className="prose">
+        <MDXContent content={post.content} />
+      </article>
+
+      <div className="post-back">
+        <Link href="/blog" className="post-back-link">← All posts</Link>
+      </div>
+
+      <footer className="footer">
+        <span className="footer-copy">© 2026 siwan kim</span>
+        <div className="footer-links">
+          {socials.map((s, i) => (
+            <span key={s.label}>
+              <a href={s.url} target="_blank" rel="noopener noreferrer">
+                {s.label}
+              </a>
+              {i < socials.length - 1 && <span className="sep"> / </span>}
+            </span>
+          ))}
+        </div>
+      </footer>
+    </>
+  );
+}

@@ -106,6 +106,10 @@ h1 {
   color: var(--text);
 }
 
+h1 .accent {
+  color: var(--accent);
+}
+
 .bio {
   font-size: clamp(15px, 1.8vw, 18px);
   color: var(--muted);
@@ -354,6 +358,294 @@ h1 {
   margin: 0 6px;
 }
 
+/* ─── Blog list header ────────────────────────────────────── */
+.blog-header {
+  padding: 48px var(--pad) 40px;
+  border-bottom: 1px solid var(--border);
+  animation: fadein 0.4s ease both;
+}
+
+.blog-heading {
+  font-size: clamp(22px, 3.5vw, 32px);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--text);
+  margin-top: 12px;
+  max-width: 560px;
+}
+
+/* ─── Blog list ───────────────────────────────────────────── */
+.blog-list {
+  border-bottom: 1px solid var(--border);
+  animation: fadein 0.5s 0.1s ease both;
+}
+
+.blog-item {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(16px, 3vw, 40px);
+  padding: 28px var(--pad);
+  border-bottom: 1px solid var(--border);
+  transition: background 0.16s ease;
+  color: inherit;
+}
+
+.blog-item:last-child {
+  border-bottom: none;
+}
+
+.blog-item:hover {
+  background: #F7F7F7;
+}
+
+.blog-item:hover .bi-title {
+  color: var(--accent);
+}
+
+.blog-item:hover .wi-arrow {
+  opacity: 1;
+  transform: translateX(4px);
+}
+
+.bi-date {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+  width: 100px;
+  padding-top: 5px;
+}
+
+.bi-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.bi-title {
+  font-size: clamp(17px, 2vw, 20px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
+  margin-bottom: 6px;
+  transition: color 0.14s ease;
+}
+
+.bi-desc {
+  font-size: clamp(13px, 1.5vw, 15px);
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.bi-meta {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+
+/* ─── Writing section (home page) ────────────────────────── */
+.writing {
+  border-bottom: 1px solid var(--border);
+  animation: fadein 0.5s 0.2s ease both;
+}
+
+.writing-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 28px var(--pad) 16px;
+}
+
+.writing-all {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+  transition: opacity 0.14s ease;
+}
+
+.writing-all:hover {
+  opacity: 0.7;
+}
+
+/* ─── Blog post hero ──────────────────────────────────────── */
+.post-hero {
+  padding: 48px var(--pad) 44px;
+  border-bottom: 1px solid var(--border);
+  max-width: 760px;
+  animation: fadein 0.4s ease both;
+}
+
+.post-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.post-title {
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+  margin-bottom: 20px;
+}
+
+.post-desc {
+  font-size: clamp(15px, 1.9vw, 18px);
+  color: var(--muted);
+  line-height: 1.75;
+  max-width: 600px;
+}
+
+/* ─── Prose (MDX content) ─────────────────────────────────── */
+.prose {
+  padding: 48px var(--pad) 64px;
+  max-width: 680px;
+  animation: fadein 0.5s 0.1s ease both;
+}
+
+.prose h2 {
+  font-size: clamp(22px, 2.8vw, 28px);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  margin: 2.5em 0 0.75em;
+  color: var(--text);
+}
+
+.prose h3 {
+  font-size: clamp(18px, 2.2vw, 22px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  margin: 2em 0 0.6em;
+  color: var(--text);
+}
+
+.prose p {
+  font-size: clamp(15px, 1.8vw, 17px);
+  line-height: 1.85;
+  color: var(--text);
+  margin-bottom: 1.4em;
+}
+
+.prose a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.prose ul,
+.prose ol {
+  margin: 0 0 1.4em 1.5em;
+}
+
+.prose li {
+  font-size: clamp(15px, 1.8vw, 17px);
+  line-height: 1.85;
+  color: var(--text);
+  margin-bottom: 0.4em;
+}
+
+.prose ul li { list-style: disc; }
+.prose ol li { list-style: decimal; }
+
+.prose blockquote {
+  border-left: 3px solid var(--accent);
+  padding-left: 20px;
+  margin: 1.5em 0;
+  color: var(--muted);
+}
+
+.prose code {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.87em;
+  background: #F5F5F5;
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: var(--text);
+}
+
+.prose pre {
+  background: #0A0A0A;
+  color: #E8E8E8;
+  padding: 20px 24px;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 1.5em 0;
+}
+
+.prose pre code {
+  background: none;
+  padding: 0;
+  font-size: 13.5px;
+  color: inherit;
+}
+
+.prose hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 2.5em 0;
+}
+
+.prose strong { font-weight: 700; }
+
+.prose img {
+  width: 100%;
+  max-width: 560px;
+  height: auto;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  margin: 1.5em 0;
+  display: block;
+}
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5em 0;
+  font-size: 14px;
+  display: block;
+  overflow-x: auto;
+}
+
+.prose th {
+  border-bottom: 2px solid var(--border);
+  padding: 10px 12px;
+  text-align: left;
+  font-weight: 700;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.prose td {
+  border-bottom: 1px solid var(--border);
+  padding: 10px 12px;
+  color: var(--text);
+}
+
+/* ─── Post back link ──────────────────────────────────────── */
+.post-back {
+  padding: 28px var(--pad);
+  border-bottom: 1px solid var(--border);
+}
+
+.post-back-link {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  transition: color 0.14s ease;
+}
+
+.post-back-link:hover {
+  color: var(--accent);
+}
+
 /* ─── Shared animation ────────────────────────────────────── */
 @keyframes fadein {
   from { opacity: 0; transform: translateY(12px); }
@@ -362,6 +654,29 @@ h1 {
 
 /* ─── Mobile — iPhone 12 and similar (≤ 680px) ───────────── */
 @media (max-width: 680px) {
+  .blog-item {
+    flex-direction: column;
+    gap: 8px;
+    padding: 24px var(--pad);
+  }
+
+  .bi-date {
+    width: auto;
+    padding-top: 0;
+  }
+
+  .wi-arrow {
+    display: none;
+  }
+
+  .post-hero {
+    padding: 36px var(--pad) 36px;
+  }
+
+  .prose {
+    padding: 36px var(--pad) 56px;
+  }
+
 
   /* Hero stacks vertically */
   .hero {

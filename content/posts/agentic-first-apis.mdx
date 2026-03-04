@@ -1,0 +1,101 @@
+---
+title: "Why I'm Bullish on Agentic-First APIs"
+description: "Agents are becoming the primary consumers of software. Most APIs aren't built for them. That gap is the opportunity."
+date: "2026-03-04"
+---
+
+Most APIs are built for humans who happen to write code. The docs assume a browser. The signup assumes an email. The billing assumes a credit card. The dashboard assumes someone is watching.
+
+That model is about to break.
+
+## Agents are already paying for things
+
+When I built DocAPI, I designed it around a question I couldn't stop thinking about: *what does an API look like if no human is ever involved?*
+
+Not "fewer humans." No humans. The agent registers, the agent pays, the agent monitors its own credit balance, the agent tops itself up when it runs low.
+
+To make that work, I had to throw out every assumption baked into traditional API design.
+
+## The registration problem
+
+The first wall an agent hits is signup. Most APIs require:
+
+- An email address (to send a verification link)
+- A browser (to click that link)
+- A credit card (stored via Stripe's payment UI)
+- A dashboard visit (to copy the API key)
+
+Agents can't do any of that. They don't have inboxes. They can't click links. They don't have credit cards.
+
+The fix is straightforward: one POST request returns everything the agent needs to operate.
+
+```json
+POST /api/register
+→ {
+  "api_key": "dk_...",
+  "usdc_address": "0x...",
+  "free_calls": 10,
+  "credits_per_usdc": 50,
+  "auto_topup": {
+    "header": "X-Credits-Remaining",
+    "recommended_threshold": 50,
+    "recommended_topup_usdc": 10
+  }
+}
+```
+
+No email. No browser. No OAuth dance. One round-trip and the agent is in production.
+
+## The billing problem
+
+Agents don't have credit cards. They have wallets.
+
+This is where crypto actually earns its place — not as a speculative asset, but as programmable money. With Coinbase's AgentKit, an agent can create its own wallet in a single API call, receive funds, and send USDC transfers without any human involvement.
+
+USDC on Base settles in seconds. There's no chargeback window. There's no card expiry. There's no 3D Secure popup. It's just a signed transaction — something software can do natively.
+
+The agent creates a wallet. You fund it once. The agent manages the rest.
+
+## Making HTTP 402 structurally impossible
+
+HTTP 402 ("Payment Required") is a silent catastrophe for autonomous software. Nobody gets paged. The job just stops.
+
+The solution is to make running out of credits structurally impossible — not through error handling, but through design.
+
+Every API response includes an `X-Credits-Remaining` header. The agent reads it after every call. When the balance drops below a threshold, the agent sends a USDC topup *asynchronously* — it doesn't wait, it doesn't block, it fires and continues working. By the time credits run low, new ones are already on the way.
+
+The agent implements this at build time, not as an afterthought. The webhook fires when USDC lands, credits are added within seconds, and the loop closes without a human ever touching it.
+
+402 becomes a theoretical error — the only way to hit it is if the source wallet itself is empty.
+
+## Software that funds itself
+
+This is the part that still feels strange to say out loud: software built by an agent during one session can fund and operate itself indefinitely, with no recurring human input.
+
+The agent registers. Gets 10 free calls to validate the integration. Creates a wallet via Coinbase AgentKit. You send it an initial USDC deposit. From that point on, the service manages its own billing. You only hear from it if something goes wrong.
+
+That's not a feature. That's a different category of software.
+
+## Why most APIs aren't ready
+
+I audited a handful of popular developer APIs against a simple 13-point checklist for agentic readiness. Most scored 2–4 out of 13.
+
+The failures aren't technical — they're assumptions. Assumptions that someone is reading the dashboard. Assumptions that someone will respond to a billing email. Assumptions that a human is in the loop somewhere.
+
+Those assumptions made sense when developers were the primary API consumers. They're becoming liabilities as agents take on more of that role.
+
+## The shift I'm betting on
+
+The trajectory is clear: agents are going from toys to infrastructure. They're already running cron jobs, generating invoices, handling customer workflows, writing and deploying code.
+
+Every one of those tasks involves calling APIs. And right now, the APIs aren't ready for them.
+
+That's not a problem. It's a window. The APIs that are built agent-first — programmatic registration, USDC billing, machine-readable errors, credit headers on every response — are going to have a distribution advantage that gets harder to overcome as agent usage scales.
+
+The developer tool market was shaped by whoever made the best DX for humans. The next wave will be shaped by whoever makes the best DX for agents.
+
+---
+
+Most API businesses are one design decision away from being useless to the next generation of software. The decision is whether to treat agents as first-class consumers — not a nice-to-have feature, but the primary user.
+
+I think that window is open right now. I'm building through it.
