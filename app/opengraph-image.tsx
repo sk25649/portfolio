@@ -6,7 +6,7 @@ export const alt = "Siwan Kim — Builder & Indie Hacker";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-const projects = ["FarmPosts", "DocAPI", "US Kids Golf Status"];
+const projects = ["FarmPosts", "DocAPI", "US Kids Golf Status", "ShipLoud"];
 
 export default function Image() {
   const fontBold = readFileSync(

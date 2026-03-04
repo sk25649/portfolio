@@ -23,6 +23,14 @@ const projects = [
       "Priority status lookup for US Kids Golf tournaments. Built for junior golfer families.",
     tag: "tool",
   },
+  {
+    id: "04",
+    name: "ShipLoud",
+    url: "https://shiploud.co",
+    description:
+      "Ship loudly. A platform for indie hackers to share what they're building and get visibility.",
+    tag: "community",
+  },
 ];
 
 const socials = [
@@ -37,6 +45,7 @@ const tickerItems = [
   "FarmPosts",
   "DocAPI",
   "US Kids Golf Status",
+  "ShipLoud",
   "Always building",
   "siwan.io",
 ];
