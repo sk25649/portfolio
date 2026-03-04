@@ -74,13 +74,14 @@ export default function Image() {
               flexDirection: "column",
               gap: "20px",
               flex: 1,
+              overflow: "hidden",
             }}
           >
             <div
               style={{
-                fontSize: 128,
+                fontSize: 108,
                 fontWeight: 800,
-                letterSpacing: "-6px",
+                letterSpacing: "-4px",
                 lineHeight: 0.88,
                 color: "#0A0A0A",
                 display: "flex",
