@@ -9,11 +9,8 @@ export const contentType = "image/png";
 const projects = ["FarmPosts", "DocAPI", "US Kids Golf Status"];
 
 export default function Image() {
-  const fontData = readFileSync(
-    join(
-      process.cwd(),
-      "node_modules/@fontsource/syne/files/syne-latin-800-normal.woff"
-    )
+  const fontBold = readFileSync(
+    join(process.cwd(), "app/fonts/Syne-ExtraBold.ttf")
   );
 
   return new ImageResponse(
@@ -21,38 +18,36 @@ export default function Image() {
       <div
         style={{
           background: "#FFFFFF",
-          width: "100%",
-          height: "100%",
+          width: "1200px",
+          height: "630px",
           display: "flex",
           flexDirection: "column",
-          justifyContent: "space-between",
-          padding: "72px 80px 80px",
-          position: "relative",
           fontFamily: "Syne",
         }}
       >
-        {/* Top row: label left, siwan.io right */}
+        {/* Top bar: label + URL */}
         <div
           style={{
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
+            padding: "40px 72px 0",
           }}
         >
           <span
             style={{
-              fontSize: 14,
+              fontSize: 13,
               fontWeight: 800,
-              letterSpacing: "0.18em",
+              letterSpacing: "0.2em",
               textTransform: "uppercase",
-              color: "#8A8A8A",
+              color: "#AAAAAA",
             }}
           >
             Portfolio
           </span>
           <span
             style={{
-              fontSize: 15,
+              fontSize: 16,
               fontWeight: 800,
               letterSpacing: "-0.02em",
               color: "#0A0A0A",
@@ -62,22 +57,30 @@ export default function Image() {
           </span>
         </div>
 
-        {/* Middle: name left + projects right */}
+        {/* Main content: two columns */}
         <div
           style={{
             display: "flex",
-            justifyContent: "space-between",
-            alignItems: "flex-end",
-            gap: "40px",
+            flex: 1,
+            padding: "0 72px",
+            alignItems: "center",
+            gap: "80px",
           }}
         >
-          {/* Name + bio */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+          {/* Left: name + bio */}
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "20px",
+              flex: 1,
+            }}
+          >
             <div
               style={{
-                fontSize: 108,
+                fontSize: 128,
                 fontWeight: 800,
-                letterSpacing: "-5px",
+                letterSpacing: "-6px",
                 lineHeight: 0.88,
                 color: "#0A0A0A",
                 display: "flex",
@@ -85,39 +88,51 @@ export default function Image() {
               }}
             >
               <span>siwan</span>
-              <span>kim.</span>
+              <span style={{ color: "#0047FF" }}>kim.</span>
             </div>
             <div
               style={{
                 fontSize: 20,
                 fontWeight: 800,
-                color: "#8A8A8A",
-                maxWidth: 400,
+                color: "#888888",
                 lineHeight: 1.6,
+                maxWidth: 420,
               }}
             >
-              builder & indie hacker. shipping things at the intersection of AI
-              and useful tools.
+              builder and indie hacker. shipping things at the intersection of
+              AI and useful tools.
             </div>
           </div>
 
-          {/* Project list */}
+          {/* Vertical divider */}
+          <div
+            style={{
+              width: "1px",
+              height: "320px",
+              background: "#E8E8E8",
+              flexShrink: 0,
+              display: "flex",
+            }}
+          />
+
+          {/* Right: project list */}
           <div
             style={{
               display: "flex",
               flexDirection: "column",
-              gap: "0px",
-              minWidth: 320,
+              gap: "0",
+          width: "420px",
+            flexShrink: 0,
             }}
           >
             <div
               style={{
                 fontSize: 11,
                 fontWeight: 800,
-                letterSpacing: "0.18em",
+                letterSpacing: "0.2em",
                 textTransform: "uppercase",
-                color: "#8A8A8A",
-                marginBottom: "16px",
+                color: "#AAAAAA",
+                marginBottom: "20px",
               }}
             >
               Selected Projects
@@ -129,38 +144,44 @@ export default function Image() {
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",
-                  padding: "16px 0",
-                  borderTop: "1px solid #E8E8E8",
+                  padding: "18px 0",
+                  borderTop: "1.5px solid #E8E8E8",
                   borderBottom:
-                    i === projects.length - 1 ? "1px solid #E8E8E8" : "none",
-                  gap: "24px",
+                    i === projects.length - 1
+                      ? "1.5px solid #E8E8E8"
+                      : "none",
                 }}
               >
                 <span
                   style={{
-                    fontSize: 22,
-                    fontWeight: 800,
-                    letterSpacing: "-0.02em",
-                    color: "#0A0A0A",
+                  fontSize: 24,
+                  fontWeight: 800,
+                  letterSpacing: "-0.02em",
+                  color: "#0A0A0A",
                   }}
                 >
                   {name}
                 </span>
-                <span style={{ fontSize: 18, color: "#0047FF" }}>→</span>
+                <span
+                  style={{
+                    fontSize: 22,
+                    color: "#0047FF",
+                    fontWeight: 800,
+                  }}
+                >
+                  →
+                </span>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Blue accent bar at bottom */}
+        {/* Blue stripe at bottom */}
         <div
           style={{
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: 8,
+            height: "10px",
             background: "#0047FF",
+            width: "100%",
             display: "flex",
           }}
         />
@@ -171,7 +192,7 @@ export default function Image() {
       fonts: [
         {
           name: "Syne",
-          data: fontData,
+          data: fontBold,
           style: "normal",
           weight: 800,
         },
