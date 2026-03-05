@@ -473,6 +473,7 @@ h1 .accent {
   padding: 48px var(--pad) 44px;
   border-bottom: 1px solid var(--border);
   max-width: 760px;
+  margin: 0 auto;
   animation: fadein 0.4s ease both;
 }
 
@@ -503,7 +504,8 @@ h1 .accent {
 /* ─── Prose (MDX content) ─────────────────────────────────── */
 .prose {
   padding: 48px var(--pad) 64px;
-  max-width: 680px;
+  max-width: 760px;
+  margin: 0 auto;
   animation: fadein 0.5s 0.1s ease both;
 }
 
@@ -633,6 +635,8 @@ h1 .accent {
 .post-back {
   padding: 28px var(--pad);
   border-bottom: 1px solid var(--border);
+  max-width: 760px;
+  margin: 0 auto;
 }
 
 .post-back-link {
