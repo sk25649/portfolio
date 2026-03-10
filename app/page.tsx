@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Script from "next/script";
 import { getAllPosts, formatDate } from "@/lib/blog";
 
 const projects = [
@@ -171,6 +172,20 @@ export default function Home() {
           ))}
         </section>
       )}
+
+      {/* Newsletter */}
+      <div className="newsletter-embed">
+        <p className="newsletter-label">Get new posts in your inbox</p>
+        <Script src="https://subscribe-forms.beehiiv.com/embed.js" strategy="afterInteractive" />
+        <iframe
+          src="https://subscribe-forms.beehiiv.com/41604aa1-d6e6-481d-9ef5-6091088ee022"
+          className="beehiiv-embed"
+          data-test-id="beehiiv-embed"
+          frameBorder={0}
+          scrolling="no"
+          style={{ width: '100%', height: '291px', margin: 0, borderRadius: 0, backgroundColor: 'transparent', boxShadow: 'none' }}
+        />
+      </div>
 
       {/* Footer */}
       <footer className="footer">
