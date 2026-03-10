@@ -1,0 +1,75 @@
+---
+title: "Amazon AI Code Outages"
+date: "2026-03-10"
+author: "Siwan"
+slug: "amazon-ai-code-outages"
+description: "This is not the correct way to adopt AI. Amazon is literally adding a human bottleneck to the process instead of leaning heavier into using AI. They should actu"
+---
+
+Amazon had a major site outage this week. The cause? AI-generated code that nobody fully understood shipping into production. Their response? Mandatory all-hands meetings blaming the engineers.
+
+That is the wrong lesson to take from this.
+
+## What actually happened
+
+Amazon laid off a significant chunk of their engineering team. Then they mandated AI usage across the org. Then they were surprised when AI-generated "vibe code" caused outages at scale. The [post on X](https://x.com/Polymarket/status/2031398299371020588) framing this blew up because everyone in tech recognized the pattern immediately.
+
+Cut the humans. Force the AI. Wonder why production is on fire.
+
+This is not an AI problem. This is a process problem with AI as the accelerant.
+
+## The blame game misses the point
+
+When a system fails, the instinct is to find a person to hold accountable. Amazon pulled engineers into a room and pointed fingers. I get why leadership does this. It is clean. It is fast. It feels like resolution.
+
+But when AI is writing the code, who exactly are you blaming? The engineer who hit merge? The model that generated the logic? The product manager who cut the review cycle to hit a sprint deadline?
+
+The real failure is that Amazon treated AI as a headcount replacement instead of a force multiplier. Those are completely different strategies with completely different risk profiles.
+
+A force multiplier makes your existing engineers more dangerous. A headcount replacement removes the judgment layer entirely. When you remove experienced engineers and mandate AI usage in the same motion, you have not automated the work. You have just removed the people who knew when the code was wrong.
+
+## What the fix actually looks like
+
+Here is what I would have done instead.
+
+You do not solve AI code risk by adding human review meetings after the fact. That is a bottleneck. You solve it by building automated guardrails that live inside the deployment pipeline itself.
+
+Think about what Greptile does. It sits on every PR, reads the actual codebase, understands what has shipped before, and flags things that deviate from how the system is supposed to work. It learns from reviewer comments over time. It gets smarter about your specific codebase the more it runs. That is a tool that understands context.
+
+Amazon should be building something like that internally, or buying it, or partnering with companies that already have it. The goal is a code risk analysis layer that catches AI-generated code doing something dangerous before it merges. Not after the outage. Not in a blame meeting. Before the merge.
+
+High-risk paths in the codebase are known. Payments, auth, infrastructure config, anything that touches data at scale. Those paths need stricter automated gates. Flag them. Require deeper analysis. Slow down specifically there while going fast everywhere else.
+
+That is not an argument against AI in engineering. That is just sensible infrastructure.
+
+## I have seen this pattern before
+
+I work at Coinbase. I build side projects. I have shipped AI-generated code personally, including code I did not fully read before pushing to a test environment.
+
+The difference is I have guardrails on production. I know which parts of a codebase are load-bearing and I treat them differently.
+
+When I was building DocAPI, most of the code was AI-assisted. Fast, useful, got me to a working product faster than I could have alone. But there were specific integration points I reviewed manually every single time because the blast radius of a bug there was unacceptable.
+
+That judgment, knowing which code is a problem if it breaks, is exactly what you lose when you reduce headcount before building the automated replacement for that judgment. Amazon did the layoffs first. They skipped building the safety net entirely.
+
+## The mandate problem
+
+Mandating AI usage without mandating AI risk infrastructure is like mandating that all employees drive faster without checking whether anyone fixed the brakes.
+
+I am genuinely pro-AI in engineering. I think teams that figure out how to use it well will operate at a fundamentally different level than teams that do not. But "figure out how to use it well" is the operative phrase.
+
+Forcing usage without building the support structure creates exactly the situation Amazon is in right now. Engineers are shipping code faster. Some of that code is wrong in ways that are hard to catch with a quick read. The review process that would have caught it has been optimized away. And now you have outages and blame meetings instead of shipped product and happy customers.
+
+The irony is that Amazon could use AI to solve this problem. An internal tool that does continuous risk analysis on PRs, trained on their codebase history, integrated with their deployment pipeline, is not science fiction. It is a few months of focused engineering work. It is less expensive than the outages. It is infinitely less damaging than mandatory blame sessions that tank engineer morale right when you need people thinking clearly.
+
+## Build the guardrails before you pull the ladder
+
+If you are leading an engineering org and you are pushing AI adoption right now, this is the actual checklist that matters.
+
+Do you have automated PR analysis that understands your codebase specifically? Do you have blast radius classification on your high-risk code paths? Do you have deployment gates that treat AI-generated code touching critical infrastructure differently than a CSS change?
+
+If the answer is no and you are still cutting headcount, you are setting up your own outage. You are just scheduling it for a later date.
+
+Amazon is a cautionary tale here, not because they used AI, but because they adopted the speed without adopting the safety layer that makes the speed sustainable.
+
+Build the guardrails first. Then go fast.
