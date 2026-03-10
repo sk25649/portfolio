@@ -631,6 +631,24 @@ h1 .accent {
   color: var(--text);
 }
 
+/* ─── Newsletter embed ────────────────────────────────────── */
+.newsletter-embed {
+  padding: 40px var(--pad);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.newsletter-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
 /* ─── Post back link ──────────────────────────────────────── */
 .post-back {
   padding: 28px var(--pad);
