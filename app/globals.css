@@ -664,6 +664,18 @@ h1 .accent {
   letter-spacing: 0.06em;
 }
 
+/* ─── Cornerstone badge ──────────────────────────────────── */
+.bi-cornerstone {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  color: #b45309;
+  background: #fef3c7;
+  padding: 1px 8px;
+  border-radius: 100px;
+  margin-left: 6px;
+}
+
 /* ─── About structured (AI SEO) ─────────────────────────── */
 .about-structured {
   padding: 32px var(--pad);
