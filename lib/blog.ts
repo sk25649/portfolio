@@ -12,6 +12,8 @@ export interface PostFrontmatter {
   slug: string;
   readingTime: string;
   tags: string[];
+  faq?: Array<{ q: string; a: string }>;
+  cornerstone?: boolean;
 }
 
 export interface Post extends PostFrontmatter {
@@ -33,6 +35,8 @@ export function getAllPosts(): PostFrontmatter[] {
         slug,
         readingTime: stats.text,
         tags: (data.tags as string[]) || [],
+        faq: (data.faq as Array<{ q: string; a: string }>) || undefined,
+        cornerstone: (data.cornerstone as boolean) || undefined,
       };
     })
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
@@ -60,6 +64,8 @@ export function getPostBySlug(slug: string): Post | null {
     slug,
     readingTime: stats.text,
     tags: (data.tags as string[]) || [],
+    faq: (data.faq as Array<{ q: string; a: string }>) || undefined,
+    cornerstone: (data.cornerstone as boolean) || undefined,
     content,
   };
 }
