@@ -407,6 +407,10 @@ h1 .accent {
   transform: translateX(4px);
 }
 
+.blog-item a:hover .bi-title {
+  color: var(--accent);
+}
+
 .bi-date {
   font-size: 11px;
   font-weight: 600;

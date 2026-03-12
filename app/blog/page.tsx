@@ -50,25 +50,28 @@ export default function BlogPage() {
 
       <section className="blog-list">
         {posts.map((post) => (
-          <Link key={post.slug} href={`/blog/${post.slug}`} className="blog-item">
+          <article key={post.slug} className="blog-item">
             <div className="bi-date">{formatDate(post.date)}</div>
             <div className="bi-content">
-              <h2 className="bi-title">{post.title}</h2>
-              <p className="bi-desc">{post.description}</p>
+              <Link href={`/blog/${post.slug}`}>
+                <h2 className="bi-title">{post.title}</h2>
+                <p className="bi-desc">{post.description}</p>
+              </Link>
               <p className="bi-meta">
                 {post.readingTime}
                 {post.tags.length > 0 && (
                   <>
                     {' · '}
                     {post.tags.map((tag) => (
-                      <span key={tag} className="bi-tag">{tag}</span>
+                      <Link key={tag} href={`/blog/tag/${tag}`} className="bi-tag">{tag}</Link>
                     ))}
                   </>
                 )}
+                {post.cornerstone && <span className="bi-cornerstone">Essential</span>}
               </p>
             </div>
-            <span className="wi-arrow">→</span>
-          </Link>
+            <Link href={`/blog/${post.slug}`} className="wi-arrow" aria-label="Read post">→</Link>
+          </article>
         ))}
       </section>
 

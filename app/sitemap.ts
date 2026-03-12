@@ -11,6 +11,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
+  const tags = Array.from(new Set(posts.flatMap((p) => p.tags)));
+  const tagEntries: MetadataRoute.Sitemap = tags.map((tag) => ({
+    url: `https://siwan.io/blog/tag/${tag}`,
+    lastModified: new Date(),
+    changeFrequency: 'weekly',
+    priority: 0.5,
+  }));
+
   return [
     {
       url: 'https://siwan.io',
@@ -25,5 +33,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.8,
     },
     ...postEntries,
+    ...tagEntries,
   ];
 }
