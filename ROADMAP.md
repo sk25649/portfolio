@@ -1,11 +1,11 @@
 # Roadmap — Portfolio (siwan.io)
 
-**Last updated:** 2026-03-12
+**Last updated:** 2026-03-13
 
 ## Progress
 
 ### Feature: Technical SEO Fixes — In Progress
-- [ ] Chunk 1: Add canonical tag to homepage metadata
+- [x] Chunk 1: Add canonical tag to homepage metadata
 - [ ] Chunk 2: Add event tracking for newsletter signups and project clicks
 - [ ] Chunk 3: Optimize meta descriptions for search intent
 
@@ -59,8 +59,8 @@
 1. In the `metadata` export, add `alternates: { canonical: 'https://siwan.io' }` to the root metadata object.
 
 **Acceptance criteria:**
-- [ ] `<link rel="canonical" href="https://siwan.io">` appears in homepage `<head>`
-- [ ] Blog posts already have canonicals — verify they still work after this change
+- [x] `<link rel="canonical" href="https://siwan.io">` appears in homepage `<head>`
+- [x] Blog posts already have canonicals — verify they still work after this change
 
 ---
 

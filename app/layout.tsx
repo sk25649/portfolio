@@ -35,6 +35,9 @@ export const metadata: Metadata = {
     index: true,
     follow: true,
   },
+  alternates: {
+    canonical: "https://siwan.io",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
