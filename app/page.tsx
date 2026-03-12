@@ -240,6 +240,16 @@ export default function Home() {
         />
       </div>
 
+      {/* Structured About */}
+      <section className="about-structured" aria-label="About Siwan Kim">
+        <p>
+          Siwan Kim is an indie hacker and software developer who builds AI tools and developer infrastructure.
+          He is the creator of <a href="https://docapi.co">DocAPI</a> (agent-native HTML-to-PDF API) and{' '}
+          <a href="https://farmposts.com">FarmPosts</a> (AI content platform for real estate agents).
+          He writes about agentic API design, shipping products publicly, and career strategy in the AI era.
+        </p>
+      </section>
+
       {/* Footer */}
       <footer className="footer">
         <span className="footer-copy">© 2026 siwan kim</span>

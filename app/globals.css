@@ -660,6 +660,23 @@ h1 .accent {
   letter-spacing: 0.06em;
 }
 
+/* ─── About structured (AI SEO) ─────────────────────────── */
+.about-structured {
+  padding: 32px var(--pad);
+  border-top: 1px solid var(--border);
+  max-width: 760px;
+  margin: 0 auto;
+}
+.about-structured p {
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.about-structured a {
+  color: var(--muted);
+  text-decoration: underline;
+}
+
 /* ─── Post back link ──────────────────────────────────────── */
 .post-back {
   padding: 28px var(--pad);
