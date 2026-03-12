@@ -106,7 +106,7 @@ export default async function BlogPostPage({ params }: Props) {
       </article>
 
       <div className="newsletter-embed">
-        <p className="newsletter-label">Get new posts in your inbox</p>
+        <p className="newsletter-label">Get posts like this every week</p>
         <Script src="https://subscribe-forms.beehiiv.com/embed.js" strategy="afterInteractive" />
         <iframe
           src="https://subscribe-forms.beehiiv.com/41604aa1-d6e6-481d-9ef5-6091088ee022"

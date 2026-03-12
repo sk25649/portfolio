@@ -175,7 +175,7 @@ export default function Home() {
 
       {/* Newsletter */}
       <div className="newsletter-embed">
-        <p className="newsletter-label">Get new posts in your inbox</p>
+        <p className="newsletter-label">Weekly insights on shipping AI tools — no fluff</p>
         <Script src="https://subscribe-forms.beehiiv.com/embed.js" strategy="afterInteractive" />
         <iframe
           src="https://subscribe-forms.beehiiv.com/41604aa1-d6e6-481d-9ef5-6091088ee022"
