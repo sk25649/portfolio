@@ -86,8 +86,7 @@ export default function Home() {
             <span className="accent">Kim.</span>
           </h1>
           <p className="bio">
-            builder &amp; indie hacker. shipping things at the intersection of
-            AI and useful tools.
+            I build AI tools and write about what actually works.
           </p>
         </div>
 
