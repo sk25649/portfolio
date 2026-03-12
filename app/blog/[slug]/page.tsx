@@ -76,11 +76,25 @@ export default async function BlogPostPage({ params }: Props) {
     mainEntityOfPage: `https://siwan.io/blog/${slug}`,
   };
 
+  const breadcrumbLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://siwan.io' },
+      { '@type': 'ListItem', position: 2, name: 'Writing', item: 'https://siwan.io/blog' },
+      { '@type': 'ListItem', position: 3, name: post.title, item: `https://siwan.io/blog/${slug}` },
+    ],
+  };
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
       />
       <nav className="nav">
         <Link href="/" className="nav-logo">siwan.io</Link>

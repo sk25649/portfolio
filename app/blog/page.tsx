@@ -13,11 +13,24 @@ const socials = [
   { label: 'linkedin', url: 'https://www.linkedin.com/in/siwankim/' },
 ];
 
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://siwan.io" },
+    { "@type": "ListItem", "position": 2, "name": "Writing", "item": "https://siwan.io/blog" }
+  ]
+};
+
 export default function BlogPage() {
   const posts = getAllPosts();
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       <nav className="nav">
         <Link href="/" className="nav-logo">siwan.io</Link>
         <div className="nav-links">
