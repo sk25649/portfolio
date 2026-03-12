@@ -36,6 +36,14 @@ const projects = [
       "Ship loudly. A platform for indie hackers to share what they're building and get visibility.",
     tag: "community",
   },
+  {
+    id: "05",
+    name: "PlayEpisodes",
+    url: "https://playepisodes.com",
+    description:
+      "3D board games inspired by TV shows. Play vs AI, local co-op, or online multiplayer.",
+    tag: "game",
+  },
 ];
 
 const socials = [
@@ -51,6 +59,7 @@ const tickerItems = [
   "DocAPI",
   "US Kids Golf Status",
   "ShipLoud",
+  "PlayEpisodes",
   "Always building",
   "siwan.io",
 ];
