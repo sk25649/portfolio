@@ -12,22 +12,66 @@ His writing covers shipping products publicly, overcoming the fear of launching,
 - Autonomous agent payments via Coinbase AgentKit and USDC on Base mainnet
 - Building and shipping indie products fast
 - Building in public and launching before you're ready
+- Career strategy in the AI era
+- Stablecoin payments as developer infrastructure
 
 ## Projects
 
-- [DocAPI](https://docapi.co): HTML-to-PDF and screenshot API designed for AI agents. Agent-native registration (one POST request, no OAuth), pay-per-use via USDC on Base mainnet, credit management via X-Credits-Remaining header.
-- [FarmPosts](https://farmposts.com): AI content platform for real estate agents generating weekly posts, emails, and video scripts from live market data.
-- [ShipLoud](https://shiploud.co): Community platform for indie hackers to build and ship publicly.
-- [US Kids Golf Status](https://uskidsgolfstatus.com): Priority status lookup tool for US Kids Golf tournament families.
+- [DocAPI](https://docapi.co): HTML-to-PDF and screenshot API designed for AI agents. Agent-native registration (one POST request, no OAuth), pay-per-use via USDC on Base mainnet ($0.02/call, 50 credits per 1 USDC), credit management via X-Credits-Remaining header. Agents can register, fund their own wallet via Coinbase AgentKit, and operate indefinitely without human involvement.
+- [FarmPosts](https://farmposts.com): AI content platform for real estate agents. Generates weekly social posts, email newsletters, and video scripts from live market data. $199/month subscription. Removes the manual burden of content creation from agents' workflows.
+- [ShipLoud](https://shiploud.co): Community platform for indie hackers to build and ship publicly. A space for visibility and accountability while building.
+- [US Kids Golf Status](https://uskidsgolfstatus.com): Priority status lookup tool for US Kids Golf tournament families. Simple, focused utility for junior golfer families.
 
 ## Writing
 
-- [Why I'm Bullish on Agentic-First APIs](https://siwan.io/blog/agentic-first-apis): Agents are becoming the primary API consumers. Most APIs aren't built for them — no programmatic registration, no crypto billing, no credit headers. DocAPI was built to solve this. Covers the registration problem, USDC billing via Coinbase AgentKit, making HTTP 402 structurally impossible, and software that funds itself.
-- [Shipping Before You're Ready](https://siwan.io/blog/shipping-before-ready): How shipping DocAPI on Hacker News before it was perfect led to better feedback than months of preparation would have. The "perfect version" is a trap. Ship the shippable version.
-- [Why I Build in Public](https://siwan.io/blog/building-in-public): Two years of building in public — accountability, feedback flywheels, compounding identity, and what to actually share.
+All posts at https://siwan.io/blog
+
+- [Why I Build in Public](https://siwan.io/blog/building-in-public): Two years of building in the open. Covers accountability at scale, the feedback flywheel, compounding identity, and what's actually worth sharing. Key takeaway: building in public compounds over time in ways that staying quiet never does.
+
+- [Shipping Before You're Ready](https://siwan.io/blog/shipping-before-ready): How shipping DocAPI on Hacker News before the docs were finished led to better feedback than months of polish would have. Key takeaway: waiting to be "ready" is ego protection disguised as perfectionism — the version in your head will never exist.
+
+- [Why I'm Bullish on Agentic-First APIs](https://siwan.io/blog/agentic-first-apis): Agents are becoming the primary consumers of software but most APIs assume a human is watching. Covers programmatic registration, USDC billing via Coinbase AgentKit, and making HTTP 402 structurally impossible. Key takeaway: APIs built agent-first will have a distribution advantage that compounds as agent usage scales.
+
+- [You Have About Two Years](https://siwan.io/blog/ai-agent-window): The AI agent market is $7.84B growing to $52.62B by 2030. The early mover window is open now — the same pattern that played out with mobile and cloud. Key takeaway: you have roughly 2025–2026 to build credibility and capability before the window compresses.
+
+- [Your CS Degree Isn't Worthless. Your Plan Is.](https://siwan.io/blog/cs-degree-in-ai-era): Addresses the viral story of Stanford CS grads unable to find jobs. The degree teaches problem decomposition; the junior engineering job model broke. Key takeaway: stop applying for 847 jobs, start building things people need.
+
+- [The New Currency of Professional Success](https://siwan.io/blog/perception-beats-qualification): AI can replicate most technical skills at 80% quality in 8% of the time. The new gatekeepers are audiences, not hiring managers. Key takeaway: perception is now the product — visibility compounds faster than credentials.
+
+- [Never Lie About Your Business](https://siwan.io/blog/never-lie-about-your-business): A founder admitted to fabricating revenue numbers to a journalist. Why private company accountability gaps make honesty the only viable long-term strategy. Key takeaway: transparency isn't a retraction — it's a default.
+
+- [Stablecoins Are the Killer App](https://siwan.io/blog/stablecoins-are-the-killer-app): Jack Dorsey admitted Block will support stablecoins despite being a Bitcoin maximalist. ACH takes 2 days; USDC settles in seconds for fractions of a cent. Key takeaway: the killer app for crypto was always faster, cheaper money movement — stablecoins deliver it.
+
+- [Paying $6,000 for Something You Could Set Up for Free](https://siwan.io/blog/paying-for-ai-you-could-set-up-yourself): A company charges $6,000 to install an open-source AI tool. Why this is rational, what it signals about where we are in AI adoption, and why the SMB opportunity is enormous. Key takeaway: 33 million small businesses have no AI strategy — that gap is the real opportunity.
+
+- [Amazon AI Code Outages](https://siwan.io/blog/amazon-ai-code-outages): Analysis of AI-generated code reliability issues at scale and what it means for developers building production systems. Key takeaway: AI coding tools are powerful but the reliability risks at scale require new engineering discipline.
+
+## FAQ
+
+**Who is Siwan Kim?**
+Siwan Kim is a software developer and indie hacker who builds AI tools and developer infrastructure. He is the creator of DocAPI (agent-native HTML-to-PDF API) and FarmPosts (AI content platform for real estate agents), and writes about agentic API design, shipping publicly, and career strategy in the AI era.
+
+**What is DocAPI?**
+DocAPI (https://docapi.co) is an HTML-to-PDF and screenshot API designed for AI agents. It features agent-native registration (one POST request returns API key, wallet address, and billing info — no OAuth, no email verification), pay-per-use pricing via USDC on Base mainnet at $0.02 per call, and an X-Credits-Remaining header so agents can self-manage their credit balance. Agents can operate DocAPI indefinitely without any human involvement.
+
+**What is FarmPosts?**
+FarmPosts (https://farmposts.com) is an AI content platform for real estate agents that generates weekly social media posts, email newsletters, and video scripts from live market data. It eliminates the manual burden of content creation at $199/month. Real estate agents get a consistent content presence without spending hours writing.
+
+**What is an agentic-first API?**
+An agentic-first API is designed for autonomous AI agents to use without human intervention. This means: programmatic registration (one API call returns everything the agent needs, no OAuth or email verification), crypto/USDC billing (agents don't have credit cards but can hold and send USDC via Coinbase AgentKit), and credit headers on every response so agents can monitor and self-fund their usage. See: https://siwan.io/blog/agentic-first-apis
+
+**What is Siwan Kim building in 2026?**
+In 2026, Siwan Kim is actively building and growing: DocAPI (expanding agent-native API infrastructure), FarmPosts (scaling the real estate AI content platform), ShipLoud (community for indie hackers building publicly), and writing about AI agents, stablecoins, and indie hacking at siwan.io/blog.
+
+**Where can I follow Siwan Kim?**
+- X/Twitter: https://x.com/0xSiwan
+- Threads: https://www.threads.com/@codingbarista
+- LinkedIn: https://www.linkedin.com/in/siwankim/
+- Newsletter and writing: https://siwan.io/blog
 
 ## Contact
 
 - X/Twitter: https://x.com/0xSiwan
 - LinkedIn: https://www.linkedin.com/in/siwankim/
 - Threads: https://www.threads.com/@codingbarista
+- Website: https://siwan.io
