@@ -78,6 +78,24 @@ const personSchema = {
       "name": "Siwan Kim",
       "description": "Builder and indie hacker shipping AI tools and developer infrastructure.",
       "author": { "@id": "https://siwan.io/#person" }
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "DocAPI",
+      "url": "https://docapi.co",
+      "applicationCategory": "DeveloperApplication",
+      "description": "HTML to PDF API for developers and AI agents. Agent-native, pay-per-use via USDC.",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "author": { "@id": "https://siwan.io/#person" }
+    },
+    {
+      "@type": "SoftwareApplication",
+      "name": "FarmPosts",
+      "url": "https://farmposts.com",
+      "applicationCategory": "BusinessApplication",
+      "description": "AI content platform for real estate agents. Weekly posts, emails, and video scripts from live market data.",
+      "offers": { "@type": "Offer", "price": "199", "priceCurrency": "USD", "priceSpecification": { "@type": "UnitPriceSpecification", "price": "199", "priceCurrency": "USD", "unitText": "MONTH" } },
+      "author": { "@id": "https://siwan.io/#person" }
     }
   ]
 };
