@@ -55,11 +55,42 @@ const tickerItems = [
   "siwan.io",
 ];
 
+const personSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://siwan.io/#person",
+      "name": "Siwan Kim",
+      "url": "https://siwan.io",
+      "jobTitle": "Software Developer & Indie Hacker",
+      "sameAs": [
+        "https://x.com/0xSiwan",
+        "https://www.linkedin.com/in/siwankim/",
+        "https://www.threads.com/@codingbarista"
+      ],
+      "knowsAbout": ["Agentic APIs", "AI tools", "Indie hacking", "USDC payments", "PDF generation", "Building in public"]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://siwan.io/#website",
+      "url": "https://siwan.io",
+      "name": "Siwan Kim",
+      "description": "Builder and indie hacker shipping AI tools and developer infrastructure.",
+      "author": { "@id": "https://siwan.io/#person" }
+    }
+  ]
+};
+
 export default function Home() {
   const recentPosts = getAllPosts().slice(0, 3);
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(personSchema) }}
+      />
       {/* Nav */}
       <nav className="nav">
         <span className="nav-logo">siwan.io</span>
