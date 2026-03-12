@@ -42,7 +42,17 @@ export default function BlogPage() {
             <div className="bi-content">
               <h2 className="bi-title">{post.title}</h2>
               <p className="bi-desc">{post.description}</p>
-              <p className="bi-meta">{post.readingTime}</p>
+              <p className="bi-meta">
+                {post.readingTime}
+                {post.tags.length > 0 && (
+                  <>
+                    {' · '}
+                    {post.tags.map((tag) => (
+                      <span key={tag} className="bi-tag">{tag}</span>
+                    ))}
+                  </>
+                )}
+              </p>
             </div>
             <span className="wi-arrow">→</span>
           </Link>

@@ -11,6 +11,7 @@ export interface PostFrontmatter {
   date: string;
   slug: string;
   readingTime: string;
+  tags: string[];
 }
 
 export interface Post extends PostFrontmatter {
@@ -31,6 +32,7 @@ export function getAllPosts(): PostFrontmatter[] {
         date: data.date as string,
         slug,
         readingTime: stats.text,
+        tags: (data.tags as string[]) || [],
       };
     })
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
@@ -57,6 +59,7 @@ export function getPostBySlug(slug: string): Post | null {
     date: data.date as string,
     slug,
     readingTime: stats.text,
+    tags: (data.tags as string[]) || [],
     content,
   };
 }
