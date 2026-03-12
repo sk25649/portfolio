@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Script from "next/script";
 import { getAllPosts, formatDate } from "@/lib/blog";
+import { TrackedLink } from "@/components/TrackedLink";
 
 const projects = [
   {
@@ -95,16 +96,18 @@ export default function Home() {
           <ul className="project-list">
             {projects.map((p) => (
               <li key={p.id}>
-                <a
+                <TrackedLink
                   href={p.url}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="project-item"
+                  eventName="project_click"
+                  eventProps={{ project: p.name }}
                 >
                   <span className="pi-num">{p.id}</span>
                   <span className="pi-name">{p.name}</span>
                   <span className="pi-arrow">→</span>
-                </a>
+                </TrackedLink>
               </li>
             ))}
           </ul>
@@ -126,12 +129,14 @@ export default function Home() {
       {/* Project detail rows */}
       <section className="work">
         {projects.map((p) => (
-          <a
+          <TrackedLink
             key={p.id}
             href={p.url}
             target="_blank"
             rel="noopener noreferrer"
             className="work-item"
+            eventName="project_click"
+            eventProps={{ project: p.name }}
           >
             <div className="wi-meta">
               <span className="wi-num">{p.id}</span>
@@ -142,7 +147,7 @@ export default function Home() {
               <p className="wi-desc">{p.description}</p>
             </div>
             <span className="wi-arrow">↗</span>
-          </a>
+          </TrackedLink>
         ))}
       </section>
 

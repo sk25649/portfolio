@@ -3,6 +3,7 @@ import Script from 'next/script';
 import { notFound } from 'next/navigation';
 import { getAllPostSlugs, getPostBySlug, formatDate } from '@/lib/blog';
 import { MDXContent } from '@/components/blog/MDXContent';
+import { PostTracker } from '@/components/PostTracker';
 import type { Metadata } from 'next';
 
 interface Props {
@@ -101,6 +102,7 @@ export default async function BlogPostPage({ params }: Props) {
         <p className="post-desc">{post.description}</p>
       </div>
 
+      <PostTracker slug={slug} title={post.title} />
       <article className="prose">
         <MDXContent content={post.content} />
       </article>
