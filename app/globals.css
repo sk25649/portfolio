@@ -681,6 +681,34 @@ h1 .accent {
   text-decoration: underline;
 }
 
+/* ─── Related posts ──────────────────────────────────────── */
+.related-posts {
+  padding: 40px var(--pad);
+  border-top: 1px solid var(--border);
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+/* ─── Post prev/next navigation ──────────────────────────── */
+.post-nav {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 32px var(--pad);
+  border-top: 1px solid var(--border);
+  max-width: 760px;
+  margin: 0 auto;
+}
+.post-nav a {
+  font-size: 14px;
+  color: var(--muted);
+  text-decoration: none;
+  max-width: 45%;
+  line-height: 1.5;
+}
+.post-nav a:hover { color: var(--text); }
+.post-nav-next { text-align: right; }
+
 /* ─── Post back link ──────────────────────────────────────── */
 .post-back {
   padding: 28px var(--pad);

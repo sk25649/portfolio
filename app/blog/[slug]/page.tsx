@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Script from 'next/script';
 import { notFound } from 'next/navigation';
-import { getAllPostSlugs, getPostBySlug, formatDate } from '@/lib/blog';
+import { getAllPostSlugs, getPostBySlug, getRelatedPosts, getAdjacentPosts, formatDate } from '@/lib/blog';
 import { MDXContent } from '@/components/blog/MDXContent';
 import { PostTracker } from '@/components/PostTracker';
 import type { Metadata } from 'next';
@@ -51,6 +51,9 @@ export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
   const post = getPostBySlug(slug);
   if (!post) notFound();
+
+  const related = getRelatedPosts(slug, post.tags);
+  const { prev, next } = getAdjacentPosts(slug);
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -149,6 +152,33 @@ export default async function BlogPostPage({ params }: Props) {
           style={{ width: '100%', height: '291px', margin: 0, borderRadius: 0, backgroundColor: 'transparent', boxShadow: 'none' }}
         />
       </div>
+
+      {related.length > 0 && (
+        <section className="related-posts">
+          <p className="projects-label">More posts</p>
+          {related.map((p) => (
+            <Link key={p.slug} href={`/blog/${p.slug}`} className="blog-item">
+              <div className="bi-date">{formatDate(p.date)}</div>
+              <div className="bi-content">
+                <h3 className="bi-title">{p.title}</h3>
+                <p className="bi-desc">{p.description}</p>
+              </div>
+              <span className="wi-arrow">→</span>
+            </Link>
+          ))}
+        </section>
+      )}
+
+      {(prev || next) && (
+        <nav className="post-nav" aria-label="Post navigation">
+          <div className="post-nav-prev">
+            {prev && <Link href={`/blog/${prev.slug}`}>← {prev.title}</Link>}
+          </div>
+          <div className="post-nav-next">
+            {next && <Link href={`/blog/${next.slug}`}>{next.title} →</Link>}
+          </div>
+        </nav>
+      )}
 
       <div className="post-back">
         <Link href="/blog" className="post-back-link">← All posts</Link>

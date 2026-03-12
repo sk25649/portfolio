@@ -70,6 +70,25 @@ export function getPostBySlug(slug: string): Post | null {
   };
 }
 
+export function getRelatedPosts(slug: string, tags: string[], limit = 3): PostFrontmatter[] {
+  const all = getAllPosts().filter((p) => p.slug !== slug);
+  const scored = all.map((p) => ({
+    post: p,
+    score: p.tags.filter((t) => tags.includes(t)).length,
+  }));
+  scored.sort((a, b) => b.score - a.score || new Date(b.post.date).getTime() - new Date(a.post.date).getTime());
+  return scored.slice(0, limit).map((s) => s.post);
+}
+
+export function getAdjacentPosts(slug: string): { prev: PostFrontmatter | null; next: PostFrontmatter | null } {
+  const posts = getAllPosts(); // sorted newest first
+  const idx = posts.findIndex((p) => p.slug === slug);
+  return {
+    prev: idx < posts.length - 1 ? posts[idx + 1] : null, // older = prev
+    next: idx > 0 ? posts[idx - 1] : null, // newer = next
+  };
+}
+
 export function formatDate(date: string): string {
   return new Date(date).toLocaleDateString('en-US', {
     year: 'numeric',
