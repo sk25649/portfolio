@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Writing — Siwan Kim',
-  description: 'Thoughts on building, shipping, and indie hacking.',
+  description: 'Essays on AI agents, shipping products, career strategy in the AI era, and building in public. By Siwan Kim.',
 };
 
 const socials = [

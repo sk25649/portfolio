@@ -18,10 +18,10 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL("https://siwan.io"),
   title: "Siwan Kim",
-  description: "Builder. Shipping things at the intersection of AI and useful tools.",
+  description: "Siwan Kim builds AI tools and writes about shipping, agentic APIs, and indie hacking. Founder of DocAPI and FarmPosts.",
   openGraph: {
     title: "Siwan Kim",
-    description: "Builder. Shipping things at the intersection of AI and useful tools.",
+    description: "Siwan Kim builds AI tools and writes about shipping, agentic APIs, and indie hacking. Founder of DocAPI and FarmPosts.",
     url: "https://siwan.io",
     siteName: "Siwan Kim",
     type: "website",
