@@ -12,7 +12,7 @@ faq:
   - q: "What is slippage in DeFi?"
     a: "Slippage is the gap between the price you expected and the price you actually got. In DeFi, prices are set by the ratio of assets in a liquidity pool. A huge trade relative to pool size throws that ratio wildly off, meaning you get far less than you paid for. A $50M trade into a $73K pool results in ~99.93% slippage."
   - q: "How could the trader have avoided this loss?"
-    a: "Several strategies would have worked: TWAP (splitting the order into hundreds of small trades over hours or days), OTC trading directly with an institutional counterparty for a quoted price, or simply setting a hard slippage limit of 1-5% — which would have cancelled the transaction automatically instead of executing it at a 99.93% loss."
+    a: "Several strategies would have worked: TWAP (splitting the order into hundreds of small trades over hours or days), OTC trading directly with an institutional counterparty for a quoted price, or simply setting a hard slippage limit of 1-5% which would have cancelled the transaction automatically instead of executing it at a 99.93% loss."
 ---
 
 On March 12, 2026, someone walked into the world's most advanced financial system, tried to make a $50 million trade, and walked out with $36,000.
@@ -21,13 +21,13 @@ No hack. No theft. No technical glitch.
 
 They clicked a button. They confirmed a warning. And $50,000,000 was gone in seconds.
 
-Here's exactly what happened — and who got rich because of it.
+Here's exactly what happened and who got rich because of it.
 
 ## DeFi in 60 seconds
 
 Traditional finance has banks, brokers, and clearing houses sitting in the middle of every trade. They match buyers with sellers, set prices, and take a cut for the service.
 
-DeFi (Decentralized Finance) removes all of them. Trades happen automatically through smart contracts — self-executing code that runs on a blockchain, with no company or person controlling it.
+DeFi (Decentralized Finance) removes all of them. Trades happen automatically through smart contracts, which are self-executing programs that run on a blockchain with no company or person controlling them.
 
 The upside: no gatekeepers, open 24/7, anyone with a crypto wallet can participate.
 
@@ -35,9 +35,9 @@ The downside: no one to call when something goes wrong.
 
 ## What actually happened
 
-A user — believed to be a large crypto trader named Garrett Jin — wanted to swap $50 million worth of aEthUSDT into AAVE tokens.
+A user believed to be a large crypto trader named Garrett Jin wanted to swap $50 million worth of aEthUSDT into AAVE tokens.
 
-Two terms worth knowing. aEthUSDT is a stablecoin — a cryptocurrency pegged 1-to-1 with the US dollar, so it doesn't go up or down in value like Bitcoin. AAVE is the governance token of the Aave protocol, a DeFi lending platform — owning it is roughly like owning stock in the system.
+Two terms worth knowing. aEthUSDT is a stablecoin, a cryptocurrency pegged 1-to-1 with the US dollar so it doesn't go up or down in value like Bitcoin. AAVE is the governance token of the Aave protocol, a DeFi lending platform. Owning it is roughly like owning stock in the system.
 
 He was using the Aave app to make the swap. The app routed the order through CoW Swap, an automated trading service, which sent it to a Sushiswap liquidity pool.
 
@@ -45,7 +45,7 @@ That's where things fell apart.
 
 ## The pool problem
 
-In DeFi, there are no traditional order books with buyers and sellers lined up. Instead, trades happen against liquidity pools — shared pots of money that anyone can deposit into. When you swap one token for another, you're trading against whatever is sitting in that pool.
+In DeFi, there are no traditional order books with buyers and sellers lined up. Instead, trades happen against liquidity pools, which are shared pots of money that anyone can deposit into. When you swap one token for another, you're trading against whatever is sitting in that pool.
 
 The size of the pool determines how much you can trade without wrecking the price.
 
@@ -55,7 +55,7 @@ Garrett's trade was $50,000,000.
 
 Imagine trying to sell a house in a neighborhood where the total annual income of all residents combined is $73,000. There's simply not enough on the other side to absorb it. The price collapses.
 
-That's slippage — the gap between what you expected to get and what you actually received. At these proportions, the slippage was roughly 99.9%. He put in $50 million. He got out $36,000.
+That's slippage: the gap between what you expected to get and what you actually received. At these proportions, the slippage was roughly 99.9%. He put in $50 million. He got out $36,000.
 
 The Aave app showed a warning about the slippage. Garrett confirmed it via a checkbox on mobile.
 
@@ -65,7 +65,7 @@ The trade executed.
 
 Here's where it gets worse.
 
-Before any transaction confirms on Ethereum, it sits in something called the mempool — a public waiting room where all pending trades are visible to anyone who wants to look. Think of it as a glass-walled lobby where everyone can see what you're about to do before you do it.
+Before any transaction confirms on Ethereum, it sits in something called the mempool, a public waiting room where all pending trades are visible to anyone who wants to look. Think of it as a glass-walled lobby where everyone can see what you're about to do before you do it.
 
 MEV bots (short for Maximal Extractable Value) are automated programs that scan this waiting room constantly, looking for large trades they can exploit.
 
@@ -75,7 +75,7 @@ When they spotted Garrett's $50M transaction, they executed a sandwich attack in
 2. **Victim executes:** Garrett's $50M hits the pool at the now-inflated, already-bad price.
 3. **Back-run:** The bot immediately sells AAVE back into the market, pocketing the difference.
 
-This is not illegal. It is not even technically a hack. It is an automated arbitrage strategy baked into how public blockchains work — and it has been happening for years.
+This is not illegal. It is not even technically a hack. It is an automated arbitrage strategy baked into how public blockchains work and it has been happening for years.
 
 ## The money trail
 
@@ -92,44 +92,40 @@ This is not illegal. It is not even technically a hack. It is an automated arbit
 
 The single largest winner was not even the MEV bot. It was the block builder.
 
-On Ethereum, block builders are the entities that decide which pending transactions get included in the next block — and crucially, in what order. They are essentially gatekeepers for the blockchain. MEV bots bribe them to order transactions favorably: put mine first, then the victim's, then mine again. The block builder in this case received a $34M bribe for the privilege.
+On Ethereum, block builders are the entities that decide which pending transactions get included in the next block and, crucially, in what order. They are essentially gatekeepers for the blockchain. MEV bots bribe them to order transactions favorably: put mine first, then the victim's, then mine again. The block builder in this case received a $34M bribe for the privilege.
 
-Liquidity providers (LPs) — ordinary people who had deposited funds into the Sushiswap pool — also collected roughly $4.4M in trading fees. Passive income for doing nothing. Lido, a company that runs Ethereum validators (the nodes that process transactions), took $1.2M as their cut for confirming the block.
+Liquidity providers (LPs) are ordinary people who had deposited funds into the Sushiswap pool. They collected roughly $4.4M in trading fees. Passive income for doing nothing. Lido, a company that runs Ethereum validators (the nodes that process transactions), took $1.2M as their cut for confirming the block.
 
 ## What should have been done
 
 There was no exotic solution required here.
 
-A TWAP strategy — splitting the $50M into hundreds of small orders spread over hours or days — would have made each individual trade too small for any bot to profitably sandwich. It's like selling that house one room at a time instead of all at once. Tools like [Definitive](https://definitive.fi) exist for exactly this: place a TWAP order, set the time window, and let it execute automatically without ever touching a pool directly.
+A TWAP strategy involves splitting the $50M into hundreds of small orders spread over hours or days. Each order is too small for any bot to profitably sandwich. It's like selling that house one room at a time instead of all at once. Tools like [Definitive](https://definitive.fi) exist for exactly this: place a TWAP order, set the time window, and let it execute automatically without ever touching a pool directly.
 
-OTC desks like Wintermute or Cumberland exist precisely for trades this size. OTC (Over the Counter) means finding a direct institutional counterparty and negotiating a private price — the same way a large stock sale goes through a broker rather than crashing the market. No pool, no slippage, no bots.
+OTC desks like Wintermute or Cumberland exist precisely for trades this size. OTC (Over the Counter) means finding a direct institutional counterparty and negotiating a private price, the same way a large stock sale goes through a broker rather than crashing the market. No pool, no slippage, no bots.
 
 Or the simplest fix of all: set a hard slippage limit. A 5% cap would have automatically cancelled the transaction the moment it detected bad pricing, saving the full $50M before a single dollar left the wallet.
 
 The Aave interface showed a warning. The user clicked through it on mobile.
 
-A single setting — `maxSlippage: 5%` — was the difference between a cancelled trade and a $50M hole.
+A single setting, `maxSlippage: 5%`, was the difference between a cancelled trade and a $50M hole.
 
----
-
-The code worked exactly as designed. The smart contracts executed flawlessly. Every player — the MEV bot, the block builder, the liquidity providers — acted rationally within the rules of the system.
+The code worked exactly as designed. The smart contracts executed flawlessly. Every player, the MEV bot, the block builder, the liquidity providers, acted rationally within the rules of the system.
 
 The only person who lost was the one who didn't understand the rules.
 
----
-
-*Sources: Lookonchain (on-chain forensics), aixbt (@aixbt_agent), Stani Kulechov (@StaniKulechov) — March 12–13, 2026*
+*Sources: Lookonchain (on-chain forensics), aixbt (@aixbt_agent), Stani Kulechov (@StaniKulechov), March 12-13, 2026*
 
 ## Quick answers
 
 **How did someone lose $50 million in a single DeFi transaction?**
-A trader dumped $50M into a liquidity pool with only $73K in it, causing ~99.9% slippage. MEV bots sandwiched the trade, capturing most of the value. The block builder — who controls transaction ordering — ended up as the single largest winner at $34M.
+A trader dumped $50M into a liquidity pool with only $73K in it, causing ~99.9% slippage. MEV bots sandwiched the trade, capturing most of the value. The block builder who controls transaction ordering ended up as the single largest winner at $34M.
 
 **What is a MEV sandwich attack?**
-MEV bots monitor the public queue of pending transactions. They buy an asset right before a large trade confirms (pushing the price up), let the victim's trade execute at the worse price, then immediately sell — pocketing the spread. It's legal, automated, and built into how public blockchains work.
+MEV bots monitor the public queue of pending transactions. They buy an asset right before a large trade confirms (pushing the price up), let the victim's trade execute at the worse price, then immediately sell and pocket the spread. It's legal, automated, and built into how public blockchains work.
 
 **What is slippage in DeFi?**
-Slippage is the gap between the price you expected and the price you actually got. DeFi prices are set by the ratio of assets in a pool — a huge trade throws that ratio off, meaning you get far less than you paid for. A $50M trade into a $73K pool results in ~99.93% slippage.
+Slippage is the gap between the price you expected and the price you actually got. DeFi prices are set by the ratio of assets in a pool. A huge trade throws that ratio off, meaning you get far less than you paid for. A $50M trade into a $73K pool results in ~99.93% slippage.
 
 **How could the trader have avoided this loss?**
-TWAP (splitting the order into small trades over time) via a tool like [Definitive](https://definitive.fi), OTC trading with an institutional counterparty, or simply setting a hard slippage limit of 1–5% — which would have cancelled the transaction automatically instead of executing it at a 99.93% loss.
+TWAP (splitting the order into small trades over time) via a tool like [Definitive](https://definitive.fi), OTC trading with an institutional counterparty, or simply setting a hard slippage limit of 1-5% which would have cancelled the transaction automatically instead of executing it at a 99.93% loss.
