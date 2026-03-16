@@ -1,0 +1,246 @@
+---
+title: "Generate PDF Reports from LangChain Agents with DocAPI"
+description: "LangChain agents can research and write. They can't produce PDFs without a human in the loop — unless you give them the right tool. Here's how to wire DocAPI into a LangChain agent so it can generate polished PDF reports autonomously."
+date: "2026-03-16"
+tags: ["AI", "LangChain", "DocAPI", "Agents"]
+cornerstone: false
+faq:
+  - q: "Can a LangChain agent generate a PDF without human intervention?"
+    a: "Yes. By wrapping DocAPI in a LangChain tool, an agent can convert its HTML output to a PDF in one function call — no browser, no human, no extra steps."
+  - q: "What is DocAPI?"
+    a: "DocAPI is a PDF generation API built for AI agents. It takes HTML and returns a PDF. It supports self-registration via a single POST, USDC billing on Base, and MCP natively — no email, no OAuth, no dashboard required."
+  - q: "How do I monitor credits in a LangChain agent?"
+    a: "DocAPI returns an X-Credits-Remaining header on every response. Read it after each call and log it or trigger a topup when it drops below your threshold."
+---
+
+LangChain agents are good at generating content. Give one a topic, a few tools, and enough context — and it will research, reason, and produce something useful.
+
+But "useful" is usually Markdown or raw text. When you need a PDF report to send to a client, share with a team, or archive — there's a gap. Something has to convert that output into a file. That something has usually been a human.
+
+It doesn't have to be.
+
+## The problem with existing PDF libraries
+
+The obvious instinct is to reach for `reportlab`, `weasyprint`, or `pdfkit`. They work, but they're not agent-friendly:
+
+- They require the agent to manage file system paths
+- Styling is a fight (especially `reportlab`)
+- Complex layouts need hand-written layout code
+- None of them are MCP-native
+
+The better pattern: let the agent generate HTML (which it already knows how to do), then call an API that converts it to a PDF. The agent stays in its lane. The API handles the rendering.
+
+## What DocAPI is
+
+[DocAPI](https://docapi.co) is a PDF generation API designed specifically for AI agents. The pitch is simple: give it HTML, get back a PDF.
+
+What makes it different from generic PDF APIs:
+
+- **Self-registration via one POST** — no email, no OAuth, no dashboard
+- **Credits on every response** — `X-Credits-Remaining` header so agents can monitor themselves
+- **MCP native** — connect it directly to any MCP-compatible agent framework via [mcp.docapi.co](https://mcp.docapi.co)
+- **Full Chrome rendering** — CSS, fonts, and layout work as expected
+- **Fast** — ~10ms cold starts, so it doesn't bottleneck the agent loop
+
+For an agent, the workflow is: generate HTML report, call DocAPI, get a PDF URL back. Done.
+
+## Setup
+
+Install the Python SDK:
+
+```bash
+pip install docapi-python langchain langchain-openai
+```
+
+Register for an API key programmatically (no email required):
+
+```python
+import requests
+
+res = requests.post("https://docapi.co/api/register")
+data = res.json()
+
+print(data["api_key"])       # save this
+print(data["usdc_address"])  # fund this to add more credits
+print(data["free_calls"])    # 10 free calls to start
+```
+
+Set your key as an environment variable:
+
+```bash
+export DOCAPI_KEY="dk_your_key_here"
+export OPENAI_API_KEY="sk_your_key_here"
+```
+
+## Create a LangChain tool for DocAPI
+
+LangChain tools are just functions wrapped with a schema. Here's a clean DocAPI tool that converts HTML to a PDF and surfaces the remaining credit balance:
+
+```python
+import os
+import requests
+from langchain.tools import tool
+
+DOCAPI_KEY = os.environ["DOCAPI_KEY"]
+DOCAPI_ENDPOINT = "https://docapi.co/api/pdf"
+
+@tool
+def generate_pdf(html_content: str) -> str:
+    """
+    Convert an HTML string to a PDF using DocAPI.
+    Returns the URL of the generated PDF.
+    Use this when you need to produce a downloadable PDF report.
+    """
+    response = requests.post(
+        DOCAPI_ENDPOINT,
+        headers={
+            "Authorization": f"Bearer {DOCAPI_KEY}",
+            "Content-Type": "application/json",
+        },
+        json={"html": html_content},
+    )
+
+    response.raise_for_status()
+
+    # Check remaining credits — log or trigger topup if low
+    credits_remaining = response.headers.get("X-Credits-Remaining")
+    if credits_remaining is not None:
+        remaining = int(credits_remaining)
+        if remaining < 10:
+            print(f"[DocAPI] Warning: only {remaining} credits left. Consider topping up.")
+        else:
+            print(f"[DocAPI] Credits remaining: {remaining}")
+
+    data = response.json()
+    return data["url"]
+```
+
+That's the whole tool. The agent calls it with HTML, gets back a URL.
+
+## Build the market report agent
+
+Here's a full working agent that researches a stock ticker and generates a PDF report:
+
+```python
+import os
+from langchain_openai import ChatOpenAI
+from langchain.agents import AgentExecutor, create_openai_tools_agent
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain.tools import tool
+import requests
+
+DOCAPI_KEY = os.environ["DOCAPI_KEY"]
+
+@tool
+def generate_pdf(html_content: str) -> str:
+    """
+    Convert an HTML string to a PDF using DocAPI.
+    Returns the URL of the generated PDF.
+    Use this when the user asks for a PDF report.
+    """
+    response = requests.post(
+        "https://docapi.co/api/pdf",
+        headers={
+            "Authorization": f"Bearer {DOCAPI_KEY}",
+            "Content-Type": "application/json",
+        },
+        json={"html": html_content},
+    )
+    response.raise_for_status()
+
+    credits_remaining = response.headers.get("X-Credits-Remaining")
+    if credits_remaining and int(credits_remaining) < 10:
+        print(f"[DocAPI] Low credits: {credits_remaining} remaining")
+
+    return response.json()["url"]
+
+
+REPORT_PROMPT = """You are a financial analyst assistant.
+
+When asked to generate a market report, you must:
+1. Write a thorough analysis of the requested company or ticker in structured HTML format
+2. Use proper HTML with inline CSS for clean styling (use a white background, dark text, clear headers)
+3. Call the generate_pdf tool with the complete HTML string
+4. Return the PDF URL to the user
+
+The HTML should include:
+- A title section with the company name and date
+- An executive summary
+- Key metrics or recent news (use realistic placeholder data if you don't have live data)
+- A short outlook section
+- Professional styling with a serif or system font
+
+Do not return raw text. Always produce a PDF.
+"""
+
+prompt = ChatPromptTemplate.from_messages([
+    ("system", REPORT_PROMPT),
+    ("human", "{input}"),
+    MessagesPlaceholder(variable_name="agent_scratchpad"),
+])
+
+llm = ChatOpenAI(model="gpt-4o", temperature=0)
+tools = [generate_pdf]
+
+agent = create_openai_tools_agent(llm, tools, prompt)
+agent_executor = AgentExecutor(agent=agent, tools=tools, verbose=True)
+
+if __name__ == "__main__":
+    result = agent_executor.invoke({
+        "input": "Generate a market report PDF for Apple (AAPL) as of today."
+    })
+    print("\nPDF report:", result["output"])
+```
+
+Run it:
+
+```bash
+python agent.py
+```
+
+The agent will reason through the task, write the HTML report, call `generate_pdf`, and return a URL you can open directly. The whole cycle takes a few seconds.
+
+## What the output looks like
+
+The agent generates HTML like this before calling the tool:
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: Georgia, serif; max-width: 800px; margin: 40px auto; color: #1a1a1a; }
+    h1 { font-size: 2rem; border-bottom: 2px solid #333; padding-bottom: 12px; }
+    h2 { font-size: 1.3rem; margin-top: 2rem; color: #444; }
+    .metric { display: inline-block; margin-right: 2rem; }
+    .label { font-size: 0.8rem; text-transform: uppercase; color: #666; }
+    .value { font-size: 1.5rem; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>Apple Inc. (AAPL) — Market Report</h1>
+  <p><strong>Date:</strong> March 16, 2026</p>
+  <h2>Executive Summary</h2>
+  <p>Apple continues to show strong fundamentals driven by services growth and its expanding ecosystem...</p>
+  <!-- ... -->
+</body>
+</html>
+```
+
+DocAPI renders it through Chrome and hands back a PDF. The agent never touched the file system.
+
+## What's next
+
+This setup already handles the core loop. Two things make it fully autonomous:
+
+**MCP integration.** If your agent framework supports MCP (Claude Desktop, Cursor, any MCP-compatible host), you can connect DocAPI directly without writing a tool wrapper. Point it at [mcp.docapi.co](https://mcp.docapi.co) and the PDF tool shows up automatically.
+
+**USDC autopay.** Right now you're manually managing credits. DocAPI supports USDC payments on Base. With Coinbase's AgentKit, the agent can hold its own wallet, check `X-Credits-Remaining` after every call, and send a topup transaction when the balance gets low — no human required. The agent funds itself.
+
+That's the fully autonomous version: agent runs, generates PDFs, monitors its own credits, pays for more credits, keeps running. No babysitting.
+
+---
+
+If you're building LangChain agents that produce deliverables, PDFs are a natural output format that clients and teams can actually use. DocAPI is the fastest way to close that gap.
+
+Full docs at [docapi.co](https://docapi.co).
