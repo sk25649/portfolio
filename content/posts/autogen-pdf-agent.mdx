@@ -1,0 +1,290 @@
+---
+title: "Generate PDF Reports from AutoGen Agents with DocAPI"
+description: "AutoGen agents can research, reason, and write — but producing a PDF requires extra plumbing. Here's how to wire DocAPI into an AutoGen function so your agents can generate polished PDF reports autonomously."
+date: "2026-03-17"
+tags: ["AI", "AutoGen", "DocAPI", "Agents"]
+cornerstone: false
+faq:
+  - q: "Can an AutoGen agent generate a PDF without human intervention?"
+    a: "Yes. Register a DocAPI function with your AssistantAgent and it can convert its HTML output into a PDF in one call — no browser, no file system, no extra steps."
+  - q: "What is DocAPI?"
+    a: "DocAPI is a PDF generation API built for AI agents. It takes HTML and returns a PDF. It supports self-registration via a single POST, USDC billing on Base, and MCP natively — no email, no OAuth, no dashboard required."
+  - q: "Does this work with AutoGen v0.4 (AgentChat)?"
+    a: "Yes. The example uses AutoGen v0.4's AgentChat API with AssistantAgent and FunctionTool. It also works with the older v0.2 ConversableAgent pattern using register_for_llm and register_for_execution."
+---
+
+AutoGen's multi-agent conversations are great for complex, back-and-forth reasoning. An assistant researches. A critic reviews. A coder writes. The human proxy approves.
+
+But when the output needs to be a deliverable — a PDF report, a formatted document, something a client can open — there's a gap. Someone has to take the agent's text and turn it into a file. That someone is usually you.
+
+It doesn't have to be.
+
+## The problem with PDF generation in agent loops
+
+The usual options — `reportlab`, `weasyprint`, `pdfkit` — work fine for scripts but break down inside agent loops:
+
+- File system management gets messy when agents run in sandboxed or cloud environments
+- Styling complex layouts requires hand-written layout code, not something an LLM does naturally
+- None of them support agentic billing or credit monitoring out of the box
+
+The better pattern: let the agent generate HTML (which LLMs do well), then call an API that handles rendering. The agent focuses on content. The API handles the PDF.
+
+## What DocAPI is
+
+[DocAPI](https://docapi.co) is a PDF generation API built for AI agents. Give it HTML, get back a PDF.
+
+What makes it different:
+
+- **Self-registration via one POST** — no email, no OAuth, no dashboard
+- **Credits on every response** — `X-Credits-Remaining` header so agents can monitor themselves
+- **MCP native** — connect directly to any MCP-compatible framework via [mcp.docapi.co](https://mcp.docapi.co)
+- **Full Chrome rendering** — CSS, flexbox, web fonts all work as expected
+- **Fast** — ~10ms cold starts so it doesn't bottleneck the agent loop
+
+## Setup
+
+Install dependencies:
+
+```bash
+pip install pyautogen requests
+```
+
+Register for an API key — no email required:
+
+```python
+import requests
+
+res = requests.post("https://docapi.co/api/register")
+data = res.json()
+
+print(data["api_key"])       # save this
+print(data["usdc_address"])  # fund this to add more credits
+print(data["free_calls"])    # 10 free calls to start
+```
+
+Set your keys:
+
+```bash
+export DOCAPI_KEY="dk_your_key_here"
+export OPENAI_API_KEY="sk_your_key_here"
+```
+
+## Define the DocAPI function
+
+AutoGen agents call Python functions registered as tools. Here's the DocAPI function:
+
+```python
+import os
+import requests
+
+DOCAPI_KEY = os.environ["DOCAPI_KEY"]
+DOCAPI_ENDPOINT = "https://docapi.co/api/pdf"
+
+
+def generate_pdf(html_content: str) -> str:
+    """
+    Convert an HTML string to a PDF using DocAPI.
+    Returns the URL of the generated PDF file.
+    Call this when the task requires producing a downloadable PDF report.
+    The html_content should be a complete HTML document with inline CSS for styling.
+    """
+    response = requests.post(
+        DOCAPI_ENDPOINT,
+        headers={
+            "Authorization": f"Bearer {DOCAPI_KEY}",
+            "Content-Type": "application/json",
+        },
+        json={"html": html_content},
+    )
+    response.raise_for_status()
+
+    # Monitor remaining credits
+    credits_remaining = response.headers.get("X-Credits-Remaining")
+    if credits_remaining is not None:
+        remaining = int(credits_remaining)
+        if remaining < 10:
+            print(f"[DocAPI] Warning: only {remaining} credits left.")
+
+    return response.json()["url"]
+```
+
+## Build the report agent (AutoGen v0.4)
+
+AutoGen v0.4 uses the `AgentChat` API. Here's a full working agent that writes a market report and generates a PDF:
+
+```python
+import asyncio
+import os
+from autogen_agentchat.agents import AssistantAgent
+from autogen_agentchat.ui import Console
+from autogen_agentchat.conditions import TextMentionTermination
+from autogen_agentchat.teams import RoundRobinGroupChat
+from autogen_ext.models.openai import OpenAIChatCompletionClient
+from autogen_core.tools import FunctionTool
+
+# Import our function from above
+from tools.docapi import generate_pdf
+
+model_client = OpenAIChatCompletionClient(
+    model="gpt-4o",
+    api_key=os.environ["OPENAI_API_KEY"],
+)
+
+pdf_tool = FunctionTool(generate_pdf, description=generate_pdf.__doc__)
+
+report_agent = AssistantAgent(
+    name="ReportAgent",
+    model_client=model_client,
+    tools=[pdf_tool],
+    system_message="""You are a financial analyst assistant that produces PDF reports.
+
+When asked to generate a report:
+1. Write a thorough analysis in well-structured HTML with inline CSS
+2. Include: title section, executive summary, key metrics, recent context, risks, and outlook
+3. Use clean styling: white background, dark text, readable fonts, clear hierarchy
+4. Call generate_pdf with the complete HTML string
+5. Return the PDF URL as your final message followed by TERMINATE
+
+Always produce a PDF — never return raw text as the final output.""",
+)
+
+termination = TextMentionTermination("TERMINATE")
+team = RoundRobinGroupChat([report_agent], termination_condition=termination)
+
+
+async def main():
+    stream = team.run_stream(
+        task="Generate a market report PDF for Apple Inc. (AAPL) as of today."
+    )
+    await Console(stream)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+Run it:
+
+```bash
+python agent.py
+```
+
+The agent writes the HTML report, calls `generate_pdf`, and returns a PDF URL. No file system, no extra dependencies.
+
+## AutoGen v0.2 pattern
+
+If you're on the older `ConversableAgent` API:
+
+```python
+import autogen
+import os
+from tools.docapi import generate_pdf
+
+config_list = [{"model": "gpt-4o", "api_key": os.environ["OPENAI_API_KEY"]}]
+
+assistant = autogen.AssistantAgent(
+    name="ReportAssistant",
+    llm_config={"config_list": config_list},
+    system_message=(
+        "You are a financial analyst. When asked for a report, write it as complete HTML "
+        "with inline CSS, call generate_pdf, and return the PDF URL. Always end with TERMINATE."
+    ),
+)
+
+user_proxy = autogen.UserProxyAgent(
+    name="UserProxy",
+    human_input_mode="NEVER",
+    max_consecutive_auto_reply=5,
+    is_termination_msg=lambda x: "TERMINATE" in x.get("content", ""),
+    code_execution_config=False,
+)
+
+# Register the tool
+assistant.register_for_llm(name="generate_pdf", description=generate_pdf.__doc__)(generate_pdf)
+user_proxy.register_for_execution(name="generate_pdf")(generate_pdf)
+
+user_proxy.initiate_chat(
+    assistant,
+    message="Generate a market report PDF for Apple Inc. (AAPL) as of today.",
+)
+```
+
+Same result — the agent generates HTML, calls the function, returns a URL.
+
+## What the HTML looks like
+
+The agent produces something like this before calling the tool:
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: -apple-system, Georgia, serif; max-width: 820px; margin: 48px auto; color: #111; line-height: 1.6; }
+    h1 { font-size: 2rem; border-bottom: 3px solid #111; padding-bottom: 14px; }
+    h2 { font-size: 1.2rem; color: #444; margin-top: 2.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .metrics { display: flex; gap: 2rem; margin: 1.5rem 0; }
+    .metric .label { font-size: 0.75rem; text-transform: uppercase; color: #888; }
+    .metric .value { font-size: 1.6rem; font-weight: 700; }
+  </style>
+</head>
+<body>
+  <h1>Apple Inc. (AAPL)</h1>
+  <p><strong>Report Date:</strong> March 17, 2026</p>
+  <h2>Executive Summary</h2>
+  <p>Apple continues to demonstrate strong fundamentals driven by services growth...</p>
+  <h2>Key Metrics</h2>
+  <div class="metrics">
+    <div class="metric"><div class="label">Market Cap</div><div class="value">$3.1T</div></div>
+    <div class="metric"><div class="label">P/E Ratio</div><div class="value">28.4x</div></div>
+    <div class="metric"><div class="label">Revenue TTM</div><div class="value">$395B</div></div>
+  </div>
+  <!-- risks, outlook, etc. -->
+</body>
+</html>
+```
+
+DocAPI renders it through Chrome and returns a PDF. The agent never touched the file system.
+
+## Multi-agent pattern
+
+AutoGen's real strength is multi-agent conversations. Here's how to split research and writing across two agents:
+
+```python
+researcher = AssistantAgent(
+    name="Researcher",
+    model_client=model_client,
+    system_message=(
+        "You are a research analyst. Gather data on the requested company: "
+        "recent news, key metrics, competitive position, risks, and analyst sentiment. "
+        "Produce a structured research summary. Do not generate PDFs."
+    ),
+)
+
+writer = AssistantAgent(
+    name="Writer",
+    model_client=model_client,
+    tools=[pdf_tool],
+    system_message=(
+        "You are a report writer. Take the research summary and produce a polished HTML report. "
+        "Call generate_pdf with the complete HTML. Return the PDF URL followed by TERMINATE."
+    ),
+)
+
+termination = TextMentionTermination("TERMINATE")
+team = RoundRobinGroupChat([researcher, writer], termination_condition=termination)
+```
+
+The researcher gathers data. The writer structures it into HTML and calls DocAPI. Each agent stays in its lane.
+
+## What's next
+
+**MCP integration.** If you're running Claude Desktop, Cursor, or any MCP-compatible host, point it at [mcp.docapi.co](https://mcp.docapi.co). The PDF tool shows up automatically without writing a function wrapper.
+
+**USDC autopay.** DocAPI supports USDC payments on Base. With Coinbase's AgentKit, your agent can hold a wallet, check `X-Credits-Remaining` after each call, and top up automatically when the balance gets low. Fully autonomous — no babysitting.
+
+---
+
+AutoGen's function-calling model makes it straightforward to add PDF output to any agent or team. DocAPI handles the rendering so your agents stay focused on content.
+
+Full docs at [docapi.co](https://docapi.co).
