@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { getAllPosts, formatDate } from '@/lib/blog';
 import type { Metadata } from 'next';
 
+export const revalidate = 0; // Always fresh — posts are added via git, need rebuild to show
+
 export const metadata: Metadata = {
   title: 'Writing — Siwan Kim',
   description: 'Essays on AI agents, shipping products, career strategy in the AI era, and building in public. By Siwan Kim.',
