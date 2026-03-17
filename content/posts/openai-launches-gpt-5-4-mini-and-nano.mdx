@@ -1,0 +1,67 @@
+---
+title: "OpenAI Launches GPT-5.4 Mini and Nano"
+date: "2026-03-17"
+author: "Siwan"
+slug: "openai-launches-gpt-5-4-mini-and-nano"
+description: "I cannot wait to try this for my openclaw agent"
+---
+
+OpenAI dropped GPT-5.4 Mini and Nano this week and my first thought wasn't about the benchmark numbers. It was about my openclaw agent and how much money I'm about to stop wasting on inference.
+
+That's where my head goes now. Not "wow, the technology is impressive." It's "okay, how do I use this thing today."
+
+## What actually got announced
+
+OpenAI posted the [release on X](https://x.com/OpenAIDevs/status/2033953815834333608) and developer Twitter immediately lost its mind. Two new small models, both optimized hard for three things: coding, computer use, and multimodal tasks. Mini is the workhorse. Nano is the thing that makes you ask "wait, how is this even possible at this price."
+
+The pitch is speed and cost. These aren't frontier models trying to be GPT-5. They're purpose-built to do specific jobs fast and cheap. That's the right call. Not every inference call needs a genius. Sometimes you just need something that's good enough, instantly, for pennies.
+
+That distinction matters more than most people realize.
+
+## Why small models are actually the interesting story
+
+Everyone obsesses over the top of the capability curve. GPT-5, Claude Opus, Gemini Ultra. The biggest, smartest, most expensive thing you can call. And those models matter. But the real unlock for builders is what happens at the bottom of the curve.
+
+Think about how agents actually work. You're not making one API call and calling it done. You're making dozens. Sometimes hundreds. Every tool call, every context check, every routing decision, every little classification task. If every one of those hits a frontier model, your cost structure falls apart before you even have users.
+
+Small, fast, cheap models are what make agents economically viable. That's been the missing piece for a lot of what I've been building.
+
+## My openclaw situation
+
+Openclaw is an agent I've been working on. Without getting too deep into what it does, the core loop involves a lot of repeated decision calls. Small reads. Context checks. Light reasoning steps. The kind of thing where you don't need GPT-5 but you do need something reliable that can handle code context and structured outputs.
+
+Right now I'm making tradeoffs I don't love. Either I use a bigger model and watch the costs pile up, or I use something smaller that occasionally makes dumb mistakes I have to build error handling around. Neither is great.
+
+GPT-5.4 Mini and Nano changes that math. If the coding performance is as solid as the announcement suggests, I can push a lot of those repeated inference calls down to Nano and save the heavier model calls for the decisions that actually matter. That's the architecture I've wanted to build toward.
+
+I cannot wait to get this into the codebase and see what the latency and cost numbers actually look like in practice.
+
+## The multimodal piece is underrated
+
+Everyone's talking about the coding benchmarks. I get it, coding is the obvious use case developers care about. But the multimodal optimization is the thing I keep coming back to.
+
+Computer use agents are genuinely hard to build right now. The feedback loop between seeing a screen state, deciding what to do, and executing an action has too much latency with current models. If Nano can compress that loop significantly, the category of "AI that can actually operate software" goes from interesting demo to genuinely useful tool faster than people expect.
+
+That's a big deal for anyone building in that space. And it's a big deal for openclaw specifically because there's a computer use layer I've been prototyping that I've had to deprioritize because the economics didn't work.
+
+They might work now.
+
+## The part that doesn't get talked about enough
+
+When models get smaller and cheaper, the incentive to build changes. Not because any individual developer suddenly has more money. But because the feedback loop on experiments tightens.
+
+Right now, if I want to test a new agent architecture, I have to think about cost before I even start. A few thousand inference calls during development and testing adds up. That friction kills ideas before they get a real shot. Cheaper models mean I can run more experiments, iterate faster, and find out earlier whether something works or doesn't.
+
+That's where I think the compounding effect of small models gets underestimated. It's not just about production cost. It's about what gets built in the first place.
+
+## What I'm actually going to do
+
+This week I'm going to pull Nano into my openclaw dev environment and start profiling it against my current setup. I want real numbers on latency, accuracy on my specific tasks, and cost per thousand calls compared to what I'm running now.
+
+If it holds up the way I think it will, I'm rearchitecting the agent's decision loop around it. Nano for the lightweight calls, Mini for anything that requires reasoning over code context, full model for the hard stuff that actually needs it.
+
+Tiered inference isn't a new idea. But until now the quality gap between tiers was too wide to make it work cleanly. Smaller models that are actually good at coding change that.
+
+The developer excitement you're seeing on X right now is real. This isn't hype about a demo. This is builders immediately seeing where this fits into things they're already trying to ship. That's the best signal there is.
+
+Get your agent architectures ready. The cheap inference era is actually here.
