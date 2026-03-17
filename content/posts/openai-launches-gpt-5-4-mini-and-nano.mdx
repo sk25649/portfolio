@@ -3,7 +3,16 @@ title: "OpenAI Launches GPT-5.4 Mini and Nano"
 date: "2026-03-17"
 author: "Siwan"
 slug: "openai-launches-gpt-5-4-mini-and-nano"
-description: "I cannot wait to try this for my openclaw agent"
+description: "OpenAI's GPT-5.4 Mini and Nano are purpose-built for coding, computer use, and cheap inference — and they change the economics of building AI agents."
+tags: ["AI", "OpenAI", "LLMs", "Agent Architecture"]
+cornerstone: false
+faq:
+  - q: "What is GPT-5.4 Nano designed for?"
+    a: "GPT-5.4 Nano is optimized for speed, cost, and three specific task types: coding, computer use, and multimodal reasoning. It is not a frontier model competing with GPT-5 — it is purpose-built to handle lightweight inference calls in agent pipelines cheaply and reliably."
+  - q: "How do GPT-5.4 Mini and Nano compare to larger models?"
+    a: "Mini and Nano trade raw capability for cost and speed. The tradeoff makes them ideal for the repetitive, low-stakes decisions inside agent loops — routing, context checks, classification — where using a frontier model would make the cost structure unworkable."
+  - q: "Why do small models matter more than frontier models for builders?"
+    a: "Agents make dozens to hundreds of inference calls per task. At frontier model pricing, those costs compound fast. Small models that are actually good at coding allow builders to tier their inference: cheap models for lightweight calls, expensive models only for hard reasoning steps. That architecture is what makes agents economically viable."
 ---
 
 OpenAI dropped GPT-5.4 Mini and Nano this week and my first thought wasn't about the benchmark numbers. It was about my openclaw agent and how much money I'm about to stop wasting on inference.
