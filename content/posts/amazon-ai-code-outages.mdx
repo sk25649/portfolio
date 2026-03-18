@@ -4,10 +4,23 @@ date: "2026-03-10"
 author: "Siwan"
 slug: "amazon-ai-code-outages"
 tags: ["AI"]
-description: "This is not the correct way to adopt AI. Amazon is literally adding a human bottleneck to the process instead of leaning heavier into using AI. They should actu"
+description: "Amazon's AI coding outages were a process problem, not a tools problem. How to adopt AI coding reliably without sacrificing production stability."
+faq:
+  - q: "Why are AI coding tools causing production outages?"
+    a: "AI coding tools themselves aren't the cause — the problem is adopting AI speed without building the reliability layer to match. When you reduce the human judgment layer (experienced engineers who know when code is wrong) without replacing it with automated guardrails in the deployment pipeline, AI-generated code that looks correct can ship breaking changes undetected."
+  - q: "How do you improve AI coding tools reliability in production?"
+    a: "Build automated PR analysis that understands your specific codebase — tools like Greptile sit on every pull request, flag deviations from established patterns, and learn from reviewer comments over time. Classify your high-risk code paths (auth, payments, infra config) and apply stricter automated gates there while going fast everywhere else."
+  - q: "Should companies use AI for code generation after the Amazon outages?"
+    a: "Yes — but with the right infrastructure. The lesson from Amazon isn't 'don't use AI.' It's 'don't cut headcount before you've built the automated replacement for the judgment those engineers provided.' AI is a force multiplier when your safety net is in place. It's a liability when you pull the safety net first."
+  - q: "What is 'vibe coding' and why is it risky?"
+    a: "Vibe coding is shipping AI-generated code without fully reviewing or understanding it — accepting the output because it looks plausible and passes surface-level checks. The risk scales with the blast radius of a bug. For a CSS change, it's low. For auth, payments, or infrastructure config, untested AI code can cause outages and data loss."
+  - q: "What automated tools help manage AI coding risk?"
+    a: "Greptile does continuous codebase-aware PR review. Standard linters and type checkers catch many surface issues. The real gap is blast radius classification — automatically identifying which PRs touch high-risk paths and requiring deeper review there. This doesn't exist as a turnkey product for most orgs, but it's buildable with a few months of focused engineering work."
 ---
 
 Amazon had a major site outage this week. The cause? AI-generated code that nobody fully understood shipping into production. Their response? Mandatory all-hands meetings blaming the engineers.
+
+This is the story of AI coding tools reliability done wrong — not because the tools failed, but because the organization removed every safeguard before the tools were ready to operate without them.
 
 That is the wrong lesson to take from this.
 
@@ -57,7 +70,7 @@ That judgment, knowing which code is a problem if it breaks, is exactly what you
 
 Mandating AI usage without mandating AI risk infrastructure is like mandating that all employees drive faster without checking whether anyone fixed the brakes.
 
-I am genuinely pro-AI in engineering. I think teams that figure out how to use it well will operate at a fundamentally different level than teams that do not. But "figure out how to use it well" is the operative phrase.
+I am genuinely pro-AI in engineering. I think teams that figure out how to use it well will operate at a fundamentally different level than teams that do not. But "figure out how to use it well" is the operative phrase. The [junior engineers who survive in this environment](/blog/cs-degree-in-ai-era) are exactly the ones who understand which code is load-bearing and treat it differently — that judgment layer can't be mandated out of existence.
 
 Forcing usage without building the support structure creates exactly the situation Amazon is in right now. Engineers are shipping code faster. Some of that code is wrong in ways that are hard to catch with a quick read. The review process that would have caught it has been optimized away. And now you have outages and blame meetings instead of shipped product and happy customers.
 
@@ -74,3 +87,22 @@ If the answer is no and you are still cutting headcount, you are setting up your
 Amazon is a cautionary tale here, not because they used AI, but because they adopted the speed without adopting the safety layer that makes the speed sustainable.
 
 Build the guardrails first. Then go fast.
+
+This matters beyond Amazon. Whether you're a solo indie hacker [shipping AI-assisted products](/blog/shipping-before-ready) or running an engineering org, the principle is the same: know which parts of your system are load-bearing, and treat AI-generated code touching those parts differently.
+
+## Frequently asked questions
+
+**Why are AI coding tools causing production outages?**
+AI coding tools themselves aren't the cause — the problem is adopting AI speed without building the reliability layer to match. When you reduce the human judgment layer without replacing it with automated guardrails in the deployment pipeline, AI-generated code that looks correct can ship breaking changes undetected.
+
+**How do you improve AI coding tools reliability in production?**
+Build automated PR analysis that understands your specific codebase. Tools like Greptile sit on every pull request, flag deviations from established patterns, and learn from reviewer comments over time. Classify your high-risk code paths (auth, payments, infra config) and apply stricter automated gates there while moving fast everywhere else.
+
+**Should companies use AI for code generation after the Amazon outages?**
+Yes — but with the right infrastructure. The lesson isn't "don't use AI." It's "don't cut headcount before you've built the automated replacement for the judgment those engineers provided." AI is a force multiplier when your safety net is in place. It's a liability when you pull the safety net first.
+
+**What is 'vibe coding' and why is it risky?**
+Vibe coding is shipping AI-generated code without fully reviewing or understanding it — accepting the output because it looks plausible and passes surface checks. The risk scales with blast radius. For a CSS change, low. For auth, payments, or infra config, untested AI code can cause outages and data loss.
+
+**What is the right way to adopt AI in an engineering organization?**
+Keep your experienced engineers. Use AI to make them faster, not to replace them. Build automated risk analysis into your deployment pipeline before you rely on AI for high-stakes code paths. The companies that figure this out will operate at a different level than those that don't.

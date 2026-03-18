@@ -1,8 +1,10 @@
 ---
 title: "How $50,000,000 Vanished in a Single Blockchain Transaction"
-description: "A plain-English breakdown of the biggest DeFi loss of 2026 — what happened, who profited, and what it teaches us about crypto's hidden dangers."
+description: "DeFi security risks explained: how $50M vanished in one transaction via slippage and MEV attacks, who profited, and how to avoid the same mistake."
 date: "2026-03-13"
-tags: ["crypto", "DeFi"]
+author: "Siwan"
+slug: "defi-50m-loss"
+tags: ["crypto", "DeFi", "Blockchain"]
 cornerstone: false
 faq:
   - q: "How did someone lose $50 million in a single DeFi transaction?"
@@ -13,7 +15,11 @@ faq:
     a: "Slippage is the gap between the price you expected and the price you actually got. In DeFi, prices are set by the ratio of assets in a liquidity pool. A huge trade relative to pool size throws that ratio wildly off, meaning you get far less than you paid for. A $50M trade into a $73K pool results in ~99.93% slippage."
   - q: "How could the trader have avoided this loss?"
     a: "Several strategies would have worked: TWAP (splitting the order into hundreds of small trades over hours or days), OTC trading directly with an institutional counterparty for a quoted price, or simply setting a hard slippage limit of 1-5% which would have cancelled the transaction automatically instead of executing it at a 99.93% loss."
+  - q: "What are the biggest DeFi security risks to know about?"
+    a: "The top risks are: slippage on illiquid pools (trading a large amount relative to pool size), MEV sandwich attacks (bots front-running your transaction in the public mempool), smart contract bugs (code that can be exploited), and rug pulls (liquidity providers withdrawing all funds). Most large losses come from the first two — they don't require any exploit, just a misunderstood trade."
 ---
+
+DeFi security risks are real — not in the Hollywood hacker sense, but in the "the system worked exactly as designed and you lost everything" sense.
 
 On March 12, 2026, someone walked into the world's most advanced financial system, tried to make a $50 million trade, and walked out with $36,000.
 
@@ -113,6 +119,8 @@ A single setting, `maxSlippage: 5%`, was the difference between a cancelled trad
 The code worked exactly as designed. The smart contracts executed flawlessly. Every player, the MEV bot, the block builder, the liquidity providers, acted rationally within the rules of the system.
 
 The only person who lost was the one who didn't understand the rules.
+
+This is a pattern that appears in many complex systems: [the warning exists, someone clicks through it](/blog/amazon-ai-code-outages), and the system executes exactly as specified. Understanding the rules before you operate in a system — whether that's DeFi, a lease agreement, or a production codebase — is the actual work. [AI is making it easier to understand dense documents and systems quickly](/blog/ai-will-read-your-lease), but only if you ask before you act.
 
 *Sources: Lookonchain (on-chain forensics), aixbt (@aixbt_agent), Stani Kulechov (@StaniKulechov), March 12-13, 2026*
 
