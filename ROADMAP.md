@@ -1,6 +1,6 @@
 # Roadmap — Portfolio (siwan.io)
 
-**Last updated:** 2026-03-17
+**Last updated:** 2026-03-17 (10K Growth Engine complete)
 
 ## Progress
 
@@ -35,18 +35,18 @@
 - [x] Chunk 2: Write LinkedIn posts for top 3 blog posts
 - [x] Chunk 3: Create evergreen social content from project proof points
 
-### Feature: 10K Pageview Growth Engine — In Progress
+### Feature: 10K Pageview Growth Engine — Complete
 - [x] Chunk 1: SEO retrofit top 5 existing posts
-- [ ] Chunk 2: Email newsletter integration
-- [ ] Chunk 3: Write "Indie Hacker Revenue Transparency" post
-- [ ] Chunk 4: Write "DocAPI vs Puppeteer" post
-- [ ] Chunk 5: Write "Junior Engineer in the AI Era" post
-- [ ] Chunk 6: Write "AI Tools for Indie Hackers" post
-- [ ] Chunk 7: HN + Reddit distribution system
-- [ ] Chunk 8: Write "The HTTP 402 Problem" post
-- [ ] Chunk 9: Write "Indie Hacker's Guide to Shipping AI Products" post
-- [ ] Chunk 10: Write "Building in Public: The Complete Playbook" post
-- [ ] Chunk 11: Monthly publishing + distribution checklist
+- [x] Chunk 2: Email newsletter integration
+- [x] Chunk 3: Write "Indie Hacker Revenue Transparency" post
+- [x] Chunk 4: Write "DocAPI vs Puppeteer" post
+- [x] Chunk 5: Write "Junior Engineer in the AI Era" post
+- [x] Chunk 6: Write "AI Tools for Indie Hackers" post
+- [x] Chunk 7: HN + Reddit distribution system
+- [x] Chunk 8: Write "The HTTP 402 Problem" post
+- [x] Chunk 9: Write "Indie Hacker's Guide to Shipping AI Products" post
+- [x] Chunk 10: Write "Building in Public: The Complete Playbook" post
+- [x] Chunk 11: Monthly publishing + distribution checklist
 
 ---
 
