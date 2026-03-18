@@ -1,0 +1,148 @@
+---
+title: "Indie Hacker AI Products: How to Build and Ship in 2026"
+date: "2026-03-17"
+author: "Siwan"
+slug: "indie-hacker-guide-shipping-ai-products"
+description: "How to build an AI product as a solo indie hacker in 2026 — a complete guide to stack, pricing, distribution, and real lessons from building DocAPI."
+tags: ["AI", "Indie Hacking", "DocAPI", "Solo Founder", "Startups"]
+cornerstone: true
+faq:
+  - q: "How do I build an AI product as a solo founder in 2026?"
+    a: "Start with a pain you personally have, validate 10 people share it, and build for 2 weeks before launching. Use Next.js, Supabase, and Vercel for infrastructure. The stack is nearly free until you have revenue. Ship incomplete, get feedback, and fix what real users actually break — not what you imagined they would."
+  - q: "What is the best tech stack for an indie hacker AI product?"
+    a: "Next.js on Vercel for frontend and API routes, Supabase for database and auth, Stripe for human payments, USDC on Base for AI agent payments, and the Claude API for AI logic. This stack costs under $50/month before you hit meaningful scale and lets one developer move as fast as a four-person team."
+  - q: "How should indie hackers price AI products?"
+    a: "Usage-based credits, charged from day one. DocAPI uses a credits system — buy $10 of credits, use them per PDF. No free tier that attracts non-payers. For AI agent customers, accept USDC on Base chain — agents don't have credit cards and can't use OAuth-gated billing flows."
+  - q: "What is the biggest mistake indie hackers make when building AI products?"
+    a: "Building for 3 months before launching. DocAPI was built in 2 weeks and launched incomplete on Hacker News. The HN comments revealed an API design flaw that became the reason two of the largest customers stayed after the fix. You cannot get that feedback without shipping."
+  - q: "How do indie hackers get their first customers for an AI product?"
+    a: "Build for developers: launch on Hacker News, write technical blog posts, post in developer communities. Build for businesses: LinkedIn content plus direct outreach. Building in public is distribution — every update post is a micro-launch. DocAPI got its first paying customer within 24 hours of the HN Show post."
+---
+
+In 2026, a solo developer with Claude and Cursor ships what used to require a 4-person team. I know because I've done it: DocAPI, an HTML-to-PDF API for developers and AI agents, went from idea to Hacker News launch in two weeks. FarmPosts, an AI content tool for agricultural businesses, followed while DocAPI was still in its first month. Both products share the same infrastructure, the same distribution playbook, and the same hard-won lessons. This is the **indie hacker AI product guide** I wish had existed when I started.
+
+## Why right now is the best time for solo AI builders
+
+The cost of building has compressed dramatically. Claude and Cursor let a solo developer move at a pace that would have required a full team two years ago. Vercel, Supabase, and Stripe all have generous free tiers that mean you can get from zero to first revenue on under $50/month of infrastructure. The distribution channels are accessible: a single well-executed HN launch drove 800 unique visitors to DocAPI in 24 hours. One good Product Hunt day can generate 500 signups.
+
+The downside: everyone has access to the same tools. Claude, Cursor, Vercel — these are commodities now. The edge is not the stack. The edge is still: who picks the right problem, ships first, and talks to users. The founders who win are the ones who use AI tooling to compress build time while spending the hours they freed up doing customer research and distribution — not just building more features.
+
+The infrastructure cost of being wrong has also dropped. When it costs $50/month to run a product and 2 weeks to build it, a failed bet costs you 2 weeks and $100, not 6 months and a team's salary. This makes it rational to take more shots, ship more experiments, and learn faster than any funded team can.
+
+## How to pick what to build as an indie hacker AI product
+
+Start with your own pain. DocAPI exists because I kept hitting the same problem: setting up Puppeteer on AWS Lambda for HTML-to-PDF generation is a maintenance nightmare. Every project needed it, the serverless cold starts were unpredictable, and the configuration was fragile. I wanted an API I could call and forget. So I built it.
+
+The filter I use for any idea: "Would I pay for this?" — then "Do 10 other people have this problem?" — then "Can I build it in 2 weeks?" All three have to be yes. One no is a reason to keep looking. The "10 other people" test is important: your own pain is a starting point, not validation. You have to go find the others.
+
+What not to do: build AI wrappers around ChatGPT with no distribution, or build clones of existing products with marginal improvements. These are crowded, commoditized, and require you to out-market funded competitors. That is not a position where a solo founder wins.
+
+The AI-specific consideration that most builders miss: **tools built for AI agents, not just using AI, are an underserved niche**. Agents have different requirements than human users. They need:
+
+- Programmatic self-registration (no OAuth flows, no UI-based onboarding)
+- Machine-friendly billing (USDC or card, with balance readable from response headers)
+- Deterministic status codes they can parse without interpretation
+- No human-in-the-loop approval steps
+
+DocAPI was designed from the start to be agent-compatible: POST to register, receive credentials in the response, and check credits remaining in every API response header. That design decision turned out to drive some of DocAPI's most reliable customers — fully automated pipelines with no human oversight that pay consistently and never churn due to payment friction.
+
+## The tech stack for solo AI product builders in 2026
+
+Pick boring, proven infrastructure. The goal is to move fast, not to be technically interesting.
+
+- **Frontend + API**: Next.js on Vercel. Handles the marketing site, the MDX blog, the dashboard, and the API routes in one codebase. Zero config, instant deploys, preview URLs on every pull request. DocAPI and this portfolio site both run on this stack.
+- **Database + Auth**: Supabase. Postgres under the hood, row-level security built in, auth included. The free tier handles early-stage traffic. I have not paid Supabase a dollar for DocAPI yet.
+- **Payments for humans**: Stripe. Standard, well-documented, and every developer already knows it.
+- **Payments for AI agents**: USDC on Base chain. Agents don't have credit cards. If your product requires OAuth or a human billing flow, AI agents cannot use it programmatically. USDC enables fully autonomous agent payment — the agent tops up its own credits without any human intervention.
+- **AI logic**: Claude API for reasoning and code generation, with OpenAI as a fallback for tasks where price sensitivity matters more than quality.
+
+Total infrastructure cost before meaningful scale: under $50/month. I detailed the exact breakdown — every tool and what I pay — in my [AI tools for indie hackers breakdown](/blog/ai-tools-indie-hackers).
+
+The most important rule: don't over-architect. The first version of DocAPI had no dashboard, no webhook system, no usage analytics. It had one endpoint that converted HTML to PDF and a credits system. That's it. Everything else was scope creep I was glad I didn't build before I knew what users actually needed.
+
+## Distribution before you build — the channel-first approach
+
+The mistake nearly every first-time indie hacker makes: build the product first, then figure out who wants it. The better order is to know your distribution channel before you write line one of code.
+
+Two questions to answer before you start building:
+
+1. Where do people who have this problem spend time online?
+2. Do you have credibility or access to that channel?
+
+If the answer to question 2 is no — if you're building for a community you have no presence in — that's a red flag. You'll have to build audience and product simultaneously, which is harder than it sounds.
+
+For DocAPI, the answer was clear: developers frustrated with Puppeteer spend time on Hacker News and in developer subreddits. I had a credible technical background. The distribution was: launch on HN, write technical blog posts about the problems DocAPI solves (the Puppeteer maintenance problem, the serverless cold start problem), and let SEO compound.
+
+For FarmPosts, the answer is harder: farmers don't browse Hacker News. They're on Facebook groups, agricultural trade publications, and tight-knit farming communities. Building audience in that channel takes longer and requires different content — not technical deep-dives, but demonstrations that the tool understands the agricultural calendar and the specific content challenges farms face.
+
+[Building in public is itself a distribution channel](/blog/building-in-public-playbook) — every update post is a small launch. The 200+ people who watched me build DocAPI before launch is why the HN post got traction. You can't buy that audience. You have to earn it over months of consistent, honest updates.
+
+I wrote more on the [shipping-before-ready approach](/blog/shipping-before-ready) — the two strategies compound together when you start distribution early.
+
+## How to price an AI product as an indie hacker
+
+Start with usage-based pricing. Customers pay for what they use. No commitments, no minimums, no subscriptions that feel like a trap.
+
+DocAPI's model: buy a block of credits, spend them on PDF generations. A $10 credit block covers roughly 100 standard PDFs. Simple to understand, low-friction to start, and no surprise billing. Credits-based models also have a clean retention dynamic: customers top up when they're getting value, and they stop when they aren't. That's honest feedback.
+
+Three things not to do with pricing:
+
+**Don't offer a free tier that attracts non-payers.** A free tier optimized for conversion will fill your support queue with users who will never pay. Charge from day one, even if the starting price is small. $10 for 100 API calls filters for people who have a real use case.
+
+**Don't under-price because you feel guilty.** Early customers are paying for your attention, your rapid iteration based on their feedback, and the risk of being early. That's worth more than the marginal cost of an API call. DocAPI's pricing was initially too low — I revised it up after the first month and nobody churned.
+
+**Don't ignore machine-readable billing for AI agent customers.** This is the one DocAPI got right from day one. Every API response returns a `X-Credits-Remaining` header. Agents read this header to decide when to top up. No polling, no surprise rate limits. Two customers specifically cited this header as the reason they chose DocAPI over alternatives. If you're building a product that AI agents might use, design the billing to be machine-readable.
+
+## Mistakes to avoid when building an indie hacker AI product
+
+These are real mistakes from DocAPI and FarmPosts, not hypothetical warnings.
+
+**Building for 3 months before launching.** DocAPI launched after 2 weeks, with incomplete docs and an unfilled pricing page placeholder. The HN thread surfaced a real API design issue within 24 hours. That fix became the reason two of my largest customers stayed. If I'd waited another month to polish everything, I would have spent that month polishing the wrong things.
+
+**Treating docs as secondary to the product.** For a developer tool, docs are part of the product experience. I shipped DocAPI with incomplete authentication documentation — intentionally, following [the ship-before-ready principle](/blog/shipping-before-ready). I paid for it in week two: signups dropped, support tickets went up, and three users who signed up for free accounts never converted because the auth flow wasn't clear. The documentation rewrite in week three fixed it, but I lost a week of conversion momentum.
+
+**Building in isolation.** Every week without sharing what you're building is a week without feedback. I posted about DocAPI during the 2-week build. Those posts brought in the first 200 people who were watching on launch day. That audience made the HN launch work.
+
+**One mistake I made specifically with pricing:** DocAPI's initial pricing page required too much thinking. There were three tiers, a credit calculator, and explanations of edge cases in the pricing table. Users arrived, read the pricing page, and left without signing up. The fix was radical simplification: one clear starting option, one price, one action. Conversions immediately improved. The lesson: pricing pages should require zero cognitive effort. If a user has to calculate anything, you've lost them.
+
+**Optimizing for vanity metrics.** The only metric that matters in the first 90 days is: "Am I talking to users who have the problem?" HN front page, Twitter impressions, newsletter signups — these feel like progress but don't confirm product-market fit. The only confirmation is a paying customer who came back. [The revenue report for DocAPI and FarmPosts](/blog/indie-hacker-revenue-report) tracks the metrics that actually matter: MRR, customer count, retention rate.
+
+**Building features before understanding what's working.** I added a webhook system to DocAPI before I understood why users chose DocAPI in the first place. The credits-in-header design and the self-registration endpoint were the actual differentiators. I learned this from user interviews, not from building. Build the thing that gets you to a conversation with real users. Then let those conversations tell you what to build next.
+
+The transparency thread runs through all of this. [Never misrepresenting your business](/blog/never-lie-about-your-business) — not to journalists, not on social media, not on your landing page — is the foundation. The indie hacker advantage is credibility through honesty. You can't build that while exaggerating metrics.
+
+## The compounding advantage of building multiple products as a solo founder
+
+FarmPosts and DocAPI share the same infrastructure: same Vercel account, same Supabase instance (separate schemas), same Next.js patterns, same deployment workflow. The second product cost about 30% of the first to stand up from an infrastructure perspective. The third will cost even less.
+
+Each product also creates content. The DocAPI HN launch post drove 300 visitors to this site in the first week and created a backlink profile that benefited every subsequent post. That content compounds — six months later, the launch post still drives traffic every week. FarmPosts will do the same thing when it launches publicly.
+
+Each product creates credibility for the next one. When I pitch FarmPosts to beta users, DocAPI is evidence that I ship things and that they work. The indie hacker track record compounds: every public product is a reference that makes the next one easier to launch.
+
+Building in public while building multiple products creates cross-pollination. DocAPI users read the FarmPosts beta posts and refer farmers they know. FarmPosts beta users try DocAPI when they need a PDF API. The audiences aren't separate — they're the same community of people who follow builders they trust.
+
+This is why the decision to [build in public](/blog/building-in-public-playbook) and to keep a transparent public record is not just an ethos choice — it's a compounding business strategy. The portfolio builds itself as long as you keep shipping and keep sharing.
+
+---
+
+## FAQ
+
+### How do I build an AI product as a solo founder in 2026?
+
+Start with a pain you personally have, validate 10 people share it, and build for 2 weeks before launching. Use Next.js, Supabase, and Vercel for infrastructure — the stack is nearly free until you have revenue. Ship incomplete, get feedback, and fix what real users actually break, not what you imagined they would. The full stack and launch approach is what I used for DocAPI.
+
+### What is the best tech stack for an indie hacker AI product?
+
+Next.js on Vercel for frontend and API routes, Supabase for database and auth, Stripe for human payments, USDC on Base for AI agent payments, and the Claude API for AI logic. This stack costs under $50/month before meaningful scale and lets one developer move as fast as a four-person team. See the [full AI tools breakdown](/blog/ai-tools-indie-hackers) for exact costs.
+
+### How should indie hackers price AI products?
+
+Usage-based credits, charged from day one. DocAPI uses a credits system — buy $10 of credits, use them per PDF. No free tier that attracts non-payers. For AI agent customers, accept USDC on Base chain — agents don't have credit cards and can't use OAuth-gated billing flows. Price higher than you think: early customers are paying for your attention and iteration speed, not just the API call.
+
+### What is the biggest mistake indie hackers make when building AI products?
+
+Building for 3 months before launching. DocAPI was built in 2 weeks and launched incomplete on Hacker News. The HN comments revealed an API design flaw that became the reason two of the largest customers stayed after the fix. You cannot get that signal without shipping. Every week you don't launch is a week of feedback you don't have.
+
+### How do indie hackers get their first customers for an AI product?
+
+Build for developers: launch on Hacker News, write technical blog posts, post in developer communities. Build for businesses: LinkedIn content plus direct outreach. Building in public is distribution — every update post is a micro-launch. DocAPI got its first paying customer within 24 hours of the HN Show post. See the [revenue report](/blog/indie-hacker-revenue-report) for exactly how the first 12 paying customers came in.
