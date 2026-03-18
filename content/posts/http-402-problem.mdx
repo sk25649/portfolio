@@ -1,0 +1,119 @@
+---
+title: "HTTP 402 Payment Required: The Status Code AI Agents Have Been Waiting For"
+date: "2026-03-17"
+author: "Siwan"
+slug: "http-402-problem"
+description: "HTTP 402 was defined in RFC 1945 in 1996 and never standardized. AI agents with crypto wallets are the use case that finally makes it matter."
+tags: ["AI", "Crypto", "APIs", "Agent Economy"]
+cornerstone: false
+faq:
+  - q: "What is HTTP 402 Payment Required?"
+    a: "HTTP 402 is a status code defined in RFC 1945 in 1996 as 'reserved for future use' to enable micropayments on the web. It was never standardized and has sat unused for 30 years — until AI agents gave it a real use case."
+  - q: "Why can't AI agents use paid APIs that require credit cards?"
+    a: "AI agents don't have credit cards, email addresses, or browser sessions. They can't complete OAuth flows or enter billing info into a Stripe UI. They need programmatic payment — which means crypto wallets, not cards."
+  - q: "How does HTTP 402 work with AI agent payments?"
+    a: "When an agent hits a paid endpoint and runs out of credits, the server returns 402 with a payment address in a response header. The agent reads the header, sends USDC to that address, and retries the request — no human involved."
+  - q: "Does any API actually implement HTTP 402 for AI agents today?"
+    a: "DocAPI (docapi.co) returns HTTP 402 with an X-Payment-Address header when an agent's credits run out. The agent can top up autonomously via USDC on Base and retry — this is working in production."
+  - q: "What is the 402-native web?"
+    a: "A 402-native web is one where paid APIs return machine-readable payment instructions instead of redirecting to a human billing flow. Any agent with a funded wallet can access any paid API without prior human setup."
+---
+
+HTTP 402 "Payment Required" has been in the HTTP spec since 1996. RFC 1945 defined it, labeled it "reserved for future use," and left it there. For 30 years it collected dust — technically valid, practically useless. AI agents are the use case that finally makes HTTP 402 payment required infrastructure worth building.
+
+## The concrete problem: agents can't pay
+
+When an AI agent hits a paid API endpoint and runs out of credits, one of two things happens: the request fails with a 403 or a vague 4xx, or the developer gets an email saying their trial expired. Either way, the job stops. Nobody gets paged. The task just silently breaks.
+
+This is a structural problem, not an edge case. Agents don't have credit cards. They can't navigate to a billing page or enter a Stripe payment method. They don't have email inboxes. The entire payment infrastructure the web was built on assumes a human in the loop at some point.
+
+As I wrote in [why agentic-first APIs are different](/blog/agentic-first-apis), the standard API design pattern — email verification, OAuth, dashboard, Stripe checkout — breaks completely when the consumer is autonomous software. Payment failure is the worst place for it to break, because it's silent and it stops work.
+
+HTTP 402 is the missing protocol layer. It was always supposed to be.
+
+## What HTTP 402 actually is
+
+RFC 1945, published in 1996, defined HTTP 1.0. Section 9.2 lists the 402 status code: "Payment Required. This code is reserved for future use."
+
+That's it. One sentence. No specification for what headers to include, what format to use, how to communicate payment requirements, or what the client should do next. The authors of the original HTTP spec had a vision for micropayments on the web — pay-per-article, pay-per-query, machine-readable pricing — and they reserved a status code for it. Then they moved on, leaving the actual standardization for later.
+
+Later never came.
+
+## Why the 90s micropayment dream died
+
+The 1990s produced a wave of micropayment schemes: Millicent, CyberCash, DigiCash, Beenz. They all assumed the web would evolve toward fine-grained pay-per-use billing with a standard protocol layer handling the payment handshake automatically.
+
+What actually happened: PayPal solved payments for humans. Credit cards won. Ad-supported content killed pay-per-article. The web scaled on attention, not micropayments.
+
+HTTP 402 stayed dormant because there was no programmable money — no wallet that software could control natively, no asset that settled in seconds without a human approving the transaction. The status code was right. The infrastructure wasn't there.
+
+## Why AI agents change the equation
+
+USDC on Base settled the programmable money problem. An AI agent can hold a wallet address, receive USDC, and send USDC with a single function call — no human approval required. With Coinbase's AgentKit, an agent can create its own wallet in one API call. Base settles in seconds. There's no chargeback window. There's no card expiry. It's just signed software doing what software does.
+
+This is exactly the payment mechanism that HTTP 402 was waiting for in 1996. The status code was right. The infrastructure didn't exist yet.
+
+The equation is now:
+- **Agent hits paid endpoint** → server returns `402 Payment Required`
+- **Response headers include** payment address and amount
+- **Agent sends USDC** to the address
+- **Agent retries** the request with credits topped up
+
+No human ever touches this flow. The agent operates autonomously. The API gets paid. The task completes.
+
+## How DocAPI implements this today
+
+This isn't theoretical. DocAPI — an HTML-to-PDF API built specifically for agents — returns HTTP 402 when an agent's credit balance runs out. The response includes an `X-Payment-Address` header with the agent's dedicated USDC deposit address.
+
+An agent handling 402 correctly looks like this:
+
+```javascript
+// Agent receives 402 from DocAPI
+if (response.status === 402) {
+  const paymentAddress = response.headers.get('X-Payment-Address');
+  const amount = response.headers.get('X-Credits-Price');
+  // agent auto-tops-up via USDC on Base
+  await sendUSDC(paymentAddress, amount);
+  // retry the original request
+  return retryRequest();
+}
+```
+
+That's the entire billing recovery flow. The agent reads two headers, executes a USDC transfer, and retries. No human is notified. The agent self-funds and continues working.
+
+The better pattern — which I covered in the [agentic-first APIs post](/blog/agentic-first-apis) — is to never hit 402 in the first place. Every DocAPI response includes an `X-Credits-Remaining` header. A well-designed agent tops up asynchronously before credits hit zero. The 402 handler is the safety net; proactive credit monitoring is the real design.
+
+## What a 402-native API economy looks like
+
+The current API economy is locked behind human-setup friction. Even the most developer-friendly APIs require a human to create an account, configure billing, and copy an API key. For agents, that's a hard wall, not a one-time cost.
+
+A 402-native API returns machine-readable payment instructions instead of redirecting to a billing page. Any agent with a funded wallet can access any 402-native API without prior setup — the agent discovers the payment requirement from the response, completes it programmatically, and proceeds.
+
+The missing piece is standardization. Headers like `X-Payment-Address` and `X-Credits-Price` need a common format so agents handle 402 responses generically, not per-API. That standardization hasn't happened yet. It will, because the pressure is building from both sides: developers are building agents that need to pay APIs, and API businesses want agent traffic on their revenue line.
+
+## The thesis
+
+We've been waiting 30 years for HTTP 402. The status code was right. The infrastructure — programmable wallets, stablecoins, agents that can hold and spend money autonomously — simply didn't exist until now.
+
+AI agents are the use case that makes HTTP 402 payment required matter. Not someday. The pattern is working in production today. The question is how long before it becomes the standard handshake for machine-to-machine payments across the API economy.
+
+My bet: faster than most API businesses expect.
+
+---
+
+## FAQ
+
+**What is HTTP 402 Payment Required?**
+HTTP 402 is a status code defined in RFC 1945 in 1996 as "reserved for future use" to enable micropayments on the web. It was never standardized and has sat unused for 30 years — until AI agents gave it a real use case.
+
+**Why can't AI agents use paid APIs that require credit cards?**
+AI agents don't have credit cards, email addresses, or browser sessions. They can't complete OAuth flows or enter billing info into a Stripe UI. They need programmatic payment — which means crypto wallets, not cards.
+
+**How does HTTP 402 work with AI agent payments?**
+When an agent hits a paid endpoint and runs out of credits, the server returns 402 with a payment address in a response header. The agent reads the header, sends USDC to that address, and retries the request — no human involved.
+
+**Does any API actually implement HTTP 402 for AI agents today?**
+DocAPI (docapi.co) returns HTTP 402 with an `X-Payment-Address` header when an agent's credits run out. The agent can top up autonomously via USDC on Base and retry — this is working in production.
+
+**What is the 402-native web?**
+A 402-native web is one where paid APIs return machine-readable payment instructions instead of redirecting to a human billing flow. Any agent with a funded wallet can access any paid API without prior human setup.
