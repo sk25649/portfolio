@@ -1,0 +1,150 @@
+---
+title: "AI Tools for Indie Hackers: What I Actually Pay For"
+date: "2026-03-17"
+author: "Siwan"
+slug: "ai-tools-indie-hackers"
+description: "A solo founder's honest breakdown of AI tools for indie hackers — real costs, real use cases for DocAPI and FarmPosts, and what I dropped."
+tags: ["AI", "Indie Hacking", "Tools", "Solo Founder"]
+cornerstone: false
+faq:
+  - q: "What AI tools do indie hackers actually use?"
+    a: "Most solo founders use Claude or ChatGPT for coding and writing ($20/month), Cursor as an AI-powered IDE ($20/month), Vercel for hosting (free to $20/month), and Supabase for the database (free tier). Total AI tooling spend for a two-product indie hacker is typically $70-100/month."
+  - q: "Is Claude or ChatGPT better for indie hackers?"
+    a: "Claude is better for coding and long-context tasks like reading an entire codebase or writing detailed documentation. ChatGPT has broader integrations. Most indie hackers who use both end up keeping only Claude — the quality gap for code generation and writing is real."
+  - q: "How much do AI tools cost for a solo founder?"
+    a: "Running two SaaS products with a full AI stack costs roughly $90/month: Claude Pro ($20), Cursor ($20), Vercel Pro ($20), Supabase free tier ($0), and smaller tools for automation and support. GitHub Copilot ($10/month) is redundant if you're already using Cursor."
+  - q: "What AI tools are not worth it for indie hackers?"
+    a: "GitHub Copilot is not worth $10/month if you already use Cursor. Cursor's AI completions are better integrated and context-aware. Copilot makes sense if you're locked into VS Code for other reasons, but for a solo founder with full control of their toolchain, it's a redundant subscription."
+  - q: "Can you build a SaaS with AI tools on a tight budget?"
+    a: "Yes. DocAPI and FarmPosts were both built on under $100/month of AI tooling. The free tiers on Supabase and Vercel handle early-stage traffic. The two paid tools that matter most are Claude Pro and Cursor — together $40/month — which cover the majority of coding, writing, and research."
+---
+
+I run two SaaS products — <a href="https://docapi.co" target="_blank" rel="noopener noreferrer">DocAPI</a> (an HTML-to-PDF API for developers and AI agents) and FarmPosts (AI content for agricultural businesses) — and I spend $69/month on AI tools total. This is the honest breakdown of every tool in my stack, what I actually use it for, and what I dropped.
+
+Not a sponsored list. Just what's on my credit card and whether it earns its place — the real **AI tools for indie hackers** picture.
+
+---
+
+## Coding tools
+
+### Claude Pro — $20/month
+
+Claude is my primary coding assistant. I use it for architecture decisions, debugging, writing tests, and drafting content. For DocAPI, Claude helped me design the USDC billing flow and the self-registration endpoint — I paste the entire codebase into context and ask it to extend a feature. For FarmPosts, I use it to write and refine the AI content generation prompts.
+
+**Monthly cost:** $20
+**Verdict:** Non-negotiable. If I had to keep one subscription, it's this one.
+
+### Cursor — $20/month
+
+Cursor is VS Code with AI deeply integrated — tab-complete that understands your whole project, a chat sidebar that can read and edit files, and multi-file edits from a single prompt. When I'm refactoring the DocAPI webhook handler, Cursor already knows how it connects to the PDF rendering queue and billing logic. That project-wide context is what separates it from basic autocomplete.
+
+**Monthly cost:** $20
+**Verdict:** Worth it. Once you're used to project-wide AI context, going back feels like coding with one hand.
+
+### GitHub Copilot — not using it
+
+I dropped Copilot after one month. At $10/month, it's a redundant subscription if you're already in Cursor. Copilot's autocomplete is good inside VS Code, but Cursor does everything Copilot does plus the multi-file reasoning that actually saves hours. If you're locked into VS Code for team reasons, Copilot makes sense. If you control your own toolchain, it doesn't.
+
+**Monthly cost:** $0 (cancelled)
+**Verdict:** Not worth it if you have Cursor. Pick one.
+
+---
+
+## Hosting and infrastructure
+
+### Vercel — $20/month (Pro)
+
+Both DocAPI and FarmPosts run on Vercel. The free tier is generous enough to get to first revenue — no-cost deployments, preview URLs on every pull request, edge functions. I upgraded to Pro for more build minutes and log retention. I've never waited more than 45 seconds for a deployment to go live.
+
+**Monthly cost:** $20 (was $0 until first paying customers)
+**Verdict:** The best dollars-per-hour-saved in the stack.
+
+### Supabase — $0/month (free tier)
+
+Database, auth, and file storage for both products. The free tier gives 500MB database, 1GB file storage, and 50,000 monthly active users — more than enough for early-stage. Postgres under the hood means no proprietary query language, and row-level security is genuinely useful for DocAPI's multi-tenant setup.
+
+**Monthly cost:** $0 (free tier)
+**Verdict:** Use the free tier until you outgrow it. You probably won't for a while.
+
+---
+
+## Marketing and content
+
+### Claude for writing — included in Pro
+
+The same $20/month covers all my content work. LinkedIn drafts, email sequences for FarmPosts customers, the DocAPI docs — all of it starts in Claude. I write a bullet-point brief, get a first draft, then edit heavily. The editing is where the writing gets good. Claude gives me something to react to instead of a blank page.
+
+**Monthly cost:** $0 additional (covered by Claude Pro)
+
+### Canva — $0/month (free tier)
+
+Social graphics for FarmPosts content previews and DocAPI launch posts. I use the free tier. It's enough. The AI image generation in Canva Pro isn't compelling enough to pay for when the free tier handles basic graphic templates.
+
+**Monthly cost:** $0
+**Verdict:** Free tier is sufficient for a solo founder's social media needs.
+
+---
+
+## Operations and automation
+
+### Make (formerly Integromat) — $9/month
+
+Make handles cross-tool automation: new DocAPI signups trigger a welcome sequence, failed FarmPosts jobs alert me on Slack, and support tickets route to the right queue. The visual builder is easier to maintain solo than custom code.
+
+**Monthly cost:** $9
+**Verdict:** Worth it. Zapier does the same thing at twice the price.
+
+---
+
+## Customer support
+
+### Plain — $0/month (free tier)
+
+Plain is support chat built for developers — clean API, GitHub integration, Slack-style interface. I use it for DocAPI support; most questions are API-related, and Plain handles code snippets well.
+
+**Monthly cost:** $0 (free tier)
+**Verdict:** The best free support tool for a developer-facing product.
+
+---
+
+## The total
+
+| Tool | Monthly cost |
+|------|-------------|
+| Claude Pro | $20 |
+| Cursor | $20 |
+| Vercel Pro | $20 |
+| Make | $9 |
+| Supabase | $0 |
+| Canva | $0 |
+| Plain | $0 |
+| **Total** | **$69/month** |
+
+I built two SaaS products on $69/month of tooling. The two that matter most — Claude and Cursor — are $40 combined. Everything else is either free or sub-$10.
+
+---
+
+## What I'd tell a new solo founder
+
+Buy Claude Pro on day one. Add Cursor within the first week. Put everything else on free tiers until you have revenue that justifies upgrading.
+
+The mistake I see is spending $200/month on tools before validating that anyone wants what you're building. The AI stack for an indie hacker doesn't need to be expensive — it needs to be fast. Same principle as [shipping before you're ready](/blog/shipping-before-ready): get signal from real users before optimizing infrastructure. If you want the bigger picture on why I build this way, [the CS degree vs. indie hacking post](/blog/cs-degree-in-ai-era) covers the career reasoning.
+
+---
+
+## FAQ
+
+**What AI tools do indie hackers actually use?**
+Most solo founders use Claude or ChatGPT for coding and writing ($20/month), Cursor as an AI-powered IDE ($20/month), Vercel for hosting (free to $20/month), and Supabase for the database (free tier). Total AI tooling spend for a two-product indie hacker is typically $70-100/month.
+
+**Is Claude or ChatGPT better for indie hackers?**
+Claude is better for coding and long-context tasks like reading an entire codebase or writing detailed documentation. ChatGPT has broader integrations. Most indie hackers who use both end up keeping only Claude — the quality gap for code generation and writing is real.
+
+**How much do AI tools cost for a solo founder?**
+Running two SaaS products with a full AI stack costs roughly $69-90/month: Claude Pro ($20), Cursor ($20), Vercel Pro ($20), Supabase free tier ($0), and smaller tools for automation and support. GitHub Copilot ($10/month) is redundant if you're already using Cursor.
+
+**What AI tools are not worth it for indie hackers?**
+GitHub Copilot is not worth $10/month if you already use Cursor. Cursor's AI completions are better integrated and context-aware. Copilot makes sense if you're locked into VS Code for team reasons, but for a solo founder with full control of their toolchain, it's a redundant subscription.
+
+**Can you build a SaaS with AI tools on a tight budget?**
+Yes. DocAPI and FarmPosts were both built on under $100/month of AI tooling. The free tiers on Supabase and Vercel handle early-stage traffic. The two paid tools that matter most are Claude Pro and Cursor — together $40/month — which cover the majority of coding, writing, and research.
