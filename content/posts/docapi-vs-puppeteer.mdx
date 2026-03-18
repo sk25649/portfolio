@@ -1,21 +1,25 @@
 ---
 title: "DocAPI vs Puppeteer: Why I Stopped Managing Chromium"
-description: "Puppeteer works. But running headless Chrome in production is a maintenance trap. Here's what I switched to and why the 150MB Lambda layer was the last straw."
 date: "2026-03-16"
-tags: ["AI", "DocAPI", "building"]
+author: "Siwan"
+slug: "docapi-vs-puppeteer"
+description: "If you need a Puppeteer alternative that works on Lambda and Vercel without a 150MB binary, here's what I switched to after two years in production."
+tags: ["Engineering", "DocAPI", "Puppeteer", "PDF Generation"]
 cornerstone: false
 faq:
-  - q: "Is DocAPI just a hosted Puppeteer?"
-    a: "Under the hood, yes — it uses headless Chromium. The difference is you never touch the binary, manage the process, or deal with cold starts. You POST HTML, get back a PDF."
-  - q: "Will it render my CSS correctly?"
-    a: "If it renders in Chrome, it renders in DocAPI. Full Flexbox, Grid, Tailwind, web fonts — no CSS subset restrictions like you get with Dompdf or WeasyPrint."
-  - q: "What about performance?"
-    a: "Cold start is around 10ms vs 3-5 seconds with self-hosted Puppeteer. For most documents, end-to-end render is under 2 seconds."
-  - q: "Do I need to change my HTML?"
-    a: "No. If you were already generating HTML output (from React, templates, whatever), you swap the Puppeteer code for a single API call. Same input, same output quality."
+  - q: "Is there a free Puppeteer alternative?"
+    a: "DocAPI has a free tier. You can self-host Puppeteer for free, but the hidden cost is the engineering time managing Chromium binaries, cold starts, memory leaks, and deployment complexity. Most teams find a paid API is cheaper once you account for that labor."
+  - q: "How do I generate PDFs without Puppeteer?"
+    a: "Send your HTML to DocAPI with a POST request and an API key. You get back a URL pointing to the rendered PDF. Three lines of fetch code, no binary, no process management, works in any Node.js environment including Lambda and Vercel Edge."
+  - q: "Is DocAPI better than Puppeteer?"
+    a: "For HTML-to-PDF conversion specifically, yes: 10ms cold start vs 3–5 seconds, 0MB binary vs 150MB+, and no process management. For browser automation, scraping, or interaction testing, Puppeteer is still the right tool — DocAPI only handles document generation."
+  - q: "Can I use DocAPI on Vercel or AWS Lambda?"
+    a: "Yes. DocAPI works in any environment that can make HTTPS requests. Vercel's 50MB function limit makes Puppeteer impossible to deploy there — DocAPI has no such constraint because the Chromium binary runs on their infrastructure, not yours."
+  - q: "What is the best Puppeteer alternative for AWS Lambda?"
+    a: "DocAPI is the best Puppeteer alternative for AWS Lambda if your use case is PDF generation. It eliminates the 150MB custom layer, removes ARM/x86 architecture decisions, and cuts cold starts from 3–5 seconds to ~10ms. For scraping or automation on Lambda, Playwright with a custom container is worth evaluating."
 ---
 
-I ran Puppeteer in production for two years. It worked, mostly. But the maintenance surface kept growing and the actual value I was getting — a PDF from HTML — never changed.
+I ran Puppeteer in production for two years. It worked, mostly. But if you're looking for a **Puppeteer alternative** that doesn't require managing a Chromium binary, custom Lambda layers, or browser process pools — keep reading, because the maintenance surface kept growing while the actual value I was getting (a PDF from HTML) never changed.
 
 Here's what finally made me switch.
 
@@ -90,9 +94,54 @@ const { url } = await response.json();
 
 Three lines. No binary. Works in any environment.
 
+## The best Puppeteer alternative for your stack
+
+The right answer depends on what you're actually trying to accomplish.
+
+**For Lambda and Vercel: DocAPI wins.** The 150MB Chromium binary is a hard blocker on Vercel (50MB function limit) and a consistent maintenance headache on Lambda. With DocAPI, there's nothing to deploy — the binary lives on their servers. Cold start drops from 3–5 seconds to ~10ms. If you're already running serverless, this is a straightforward swap.
+
+**For scraping and browser automation: stick with Puppeteer.** If you need to click through forms, intercept network requests, or run interaction tests, Puppeteer is the right tool. DocAPI is purpose-built for document generation. It doesn't expose a browser automation API because it doesn't need to.
+
+**For AI agents: DocAPI wins.** If you're wiring PDF generation into a LangChain pipeline, CrewAI agent, or any other [agentic-first API workflow](/blog/agentic-first-apis), DocAPI's design fits natively. Self-registration via one POST (no email, no OAuth), USDC billing on Base (agents don't have credit cards), and an `X-Credits-Remaining` header on every response so the agent can monitor its own balance. No filesystem access needed, no binary to package with the agent runtime.
+
+## Migration guide: switching from Puppeteer to DocAPI
+
+If you're currently using Puppeteer for PDF generation, the migration takes about 15 minutes.
+
+**Step 1: Get an API key.** Go to [docapi.co](https://docapi.co) and register. Self-registration is one POST request — no OAuth, no email confirmation required.
+
+**Step 2: Remove the Chromium dependency.** Delete `puppeteer`, `puppeteer-core`, `@sparticuz/chromium`, or any variant from your `package.json`. If you were using a Lambda layer, remove it from your deployment config.
+
+**Step 3: Replace the launch/navigate/close code.** Find your `puppeteer.launch()` block and replace the entire function with a single `fetch` call:
+
+```javascript
+async function generatePDF(html) {
+  const response = await fetch('https://docapi.co/api/pdf', {
+    method: 'POST',
+    headers: {
+      'x-api-key': process.env.DOCAPI_KEY,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ html }),
+  });
+  const { url } = await response.json();
+  return url; // presigned S3 URL, valid for 1 hour
+}
+```
+
+**Step 4: Update your environment variables.** Add `DOCAPI_KEY` to your `.env` file and your deployment environment (Lambda env vars, Vercel env, etc.).
+
+**Step 5: Delete the custom Lambda layer (if applicable).** If you had a custom Chromium layer attached to your Lambda function, remove it. Your deployment package will shrink by 150MB+.
+
+**Step 6: Test with your existing HTML.** Your HTML templates don't need to change. If they rendered correctly in Puppeteer, they'll render the same way in DocAPI — it's the same headless Chrome engine underneath, just hosted for you.
+
+The full migration for a typical Node.js app is a net deletion of ~50 lines of setup code.
+
+I wrote about the tradeoff of [shipping fast and iterating later](/blog/shipping-before-ready) — this migration is a good example of that. The Puppeteer setup felt "right" at the time because it was self-contained. In hindsight, the API call was always the better architecture for a use case that doesn't need browser control.
+
 ## When Puppeteer still makes sense
 
-I'm not saying Puppeteer is bad. If you need browser automation beyond PDF generation — scraping, screenshots, interaction testing — Puppeteer is the right tool. DocAPI is specifically for the "convert HTML to PDF" use case.
+Puppeteer is not bad software. If you need browser automation beyond PDF generation — scraping, screenshots, interaction testing — Puppeteer is the right tool. DocAPI is specifically for the "convert HTML to PDF" use case.
 
 If that's all you need, an API call is cleaner than running a browser process.
 
@@ -103,3 +152,27 @@ DocAPI was built with agents in mind. Self-registration via one POST (no email, 
 If you're wiring PDF generation into a LangChain, CrewAI, or any other agent framework, the programmatic setup is a better fit than Puppeteer anyway — no filesystem access needed, no binary to package with the agent runtime.
 
 Full docs at [docapi.co](https://docapi.co).
+
+---
+
+## FAQ
+
+### Is there a free Puppeteer alternative?
+
+DocAPI has a free tier. You can self-host Puppeteer for free, but the hidden cost is the engineering time managing Chromium binaries, cold starts, memory leaks, and deployment complexity. Most teams find a paid API is cheaper once you account for that labor.
+
+### How do I generate PDFs without Puppeteer?
+
+Send your HTML to DocAPI with a POST request and an API key. You get back a URL pointing to the rendered PDF. Three lines of fetch code, no binary, no process management, works in any Node.js environment including Lambda and Vercel Edge.
+
+### Is DocAPI better than Puppeteer?
+
+For HTML-to-PDF conversion specifically, yes: 10ms cold start vs 3–5 seconds, 0MB binary vs 150MB+, and no process management. For browser automation, scraping, or interaction testing, Puppeteer is still the right tool — DocAPI only handles document generation.
+
+### Can I use DocAPI on Vercel or AWS Lambda?
+
+Yes. DocAPI works in any environment that can make HTTPS requests. Vercel's 50MB function limit makes Puppeteer impossible to deploy there — DocAPI has no such constraint because the Chromium binary runs on their infrastructure, not yours.
+
+### What is the best Puppeteer alternative for AWS Lambda?
+
+DocAPI is the best Puppeteer alternative for AWS Lambda if your use case is PDF generation. It eliminates the 150MB custom layer, removes ARM/x86 architecture decisions, and cuts cold starts from 3–5 seconds to ~10ms. For scraping or automation on Lambda, Playwright with a custom container is worth evaluating.
