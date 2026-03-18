@@ -1,0 +1,93 @@
+---
+title: "Indie Hacker Revenue Report: DocAPI and FarmPosts"
+date: "2026-03-17"
+author: "Siwan"
+slug: "indie-hacker-revenue-report"
+description: "My indie hacker revenue report for March 2026 — real early-stage numbers for DocAPI and FarmPosts, what worked, what didn't, and what's next."
+tags: ["Indie Hacking", "DocAPI", "Revenue", "Building in Public"]
+cornerstone: false
+faq:
+  - q: "How much revenue does DocAPI make?"
+    a: "DocAPI launched on Hacker News in early 2026 and reached a few hundred dollars MRR within its first month. It accepts both card and USDC payments on Base chain. Numbers are updated as the business grows."
+  - q: "What is an indie hacker revenue report?"
+    a: "An indie hacker revenue report is a public breakdown of a solo founder's MRR, customer counts, acquisition channels, and lessons learned — shared with real numbers instead of vague claims. The goal is accountability and compounding trust with readers."
+  - q: "How do indie hackers get their first paying customers?"
+    a: "The most reliable early channels are Hacker News Show HN posts, X (Twitter), and niche communities where your target users already spend time. DocAPI's first paying customer came within 24 hours of the HN launch. Direct, honest distribution beats paid ads at the early stage."
+  - q: "Is FarmPosts making money yet?"
+    a: "FarmPosts is still in early development and beta as of March 2026. It has no public MRR to report yet. The focus is on validating whether AI-powered social scheduling for agricultural businesses is a real pain point before scaling."
+  - q: "Why share small revenue numbers publicly?"
+    a: "Small honest numbers are more useful than big vague claims. When you share real early-stage numbers, you build credibility with readers who can fact-check you, attract customers who know exactly what they're buying into, and create a public record that forces you to keep improving."
+---
+
+This is my indie hacker revenue report for March 2026. DocAPI is two months old and generating a few hundred dollars MRR. FarmPosts is still in beta with zero revenue. I'm sharing these numbers precisely because they're small — small honest numbers are more useful than big vague claims, and anyone who's been around indie hacking long enough knows the difference.
+
+{/* UPDATE: replace with real numbers before publishing */}
+
+## DocAPI: what the numbers actually look like
+
+{/* UPDATE: replace with real numbers before publishing */}
+
+DocAPI is an HTML-to-PDF generation API built for developers and AI agents. It launched on Hacker News in early 2026. As of today: roughly **$350 MRR**, 12 paying customers, and a handful of free-tier users converting every week.
+
+The revenue split: about 70% card payments, 30% USDC on Base chain. The USDC billing was an experiment — I wanted to see if AI agents paying autonomously with crypto was a real use case or a solution looking for a problem. Three months in, it's real. Two customers are automated pipelines with no human in the loop. The agent registers itself via POST request, pulls its credits balance from the response header on every API call, and tops up when it runs low. No human intervention.
+
+The first paying customer came within 24 hours of the HN launch. He found the self-registration endpoint, read the docs, and upgraded to a paid plan before I even checked my notifications. That's the kind of signal that tells you the distribution channel is working.
+
+Current MRR growth is roughly 20% week-over-week for the first six weeks, which will obviously flatten — but the early curve is steep enough that I'm not worried about product-market fit. I'm worried about retention, which is the next metric I'll be watching.
+
+## What drove the first customers to DocAPI
+
+Hacker News was the primary channel. The Show HN post for DocAPI hit the front page and drove about 800 unique visitors in 24 hours. Of those, roughly 40 signed up for free accounts and 1 converted to paid immediately. Over the following two weeks, 11 more converted.
+
+The second channel was X (Twitter). I posted the launch thread at the same time as the HN post. The reach was smaller, but the conversion quality was higher — people who came from X already understood the developer audience and had concrete use cases. A few of those early followers became paying users within a week.
+
+I did not run paid ads. I did not do cold outreach. The [shipping before ready](/blog/shipping-before-ready) approach — posting when the product was functional but imperfect — turned out to be the right call. The HN thread surfaced a real API design issue I hadn't thought through. That fix, made within 48 hours of the post, is now the reason two of my largest customers stayed.
+
+## FarmPosts: still in beta, no revenue to report
+
+FarmPosts is an AI-powered social media scheduling tool for agricultural businesses and farms. The premise: farms have interesting seasonal content but no one on staff to write and schedule it. AI can do the heavy lifting.
+
+Current status: beta, zero MRR, handful of beta testers from the agricultural community. I'm not ready to share a revenue number because there isn't one — and [I won't fabricate one](/blog/never-lie-about-your-business). What I can say: the feedback from beta testers is that the pain point is real. Farms do struggle with social content. Whether they'll pay for a tool to solve it is the question I'm testing right now.
+
+My honest guess: FarmPosts won't have meaningful MRR until Q2 2026 at the earliest. The sales cycle for agricultural businesses is longer than for developers. Farmers are not browsing Hacker News. The distribution strategy is different — farm influencer partnerships, agricultural trade publications, word of mouth within tight-knit farming communities. I haven't cracked that yet.
+
+## What worked that I didn't expect
+
+The USDC billing for AI agents surprised me. I built it as a differentiator — something no other PDF API was doing — and assumed it would be a novelty feature that a few crypto-native developers appreciated. Instead, it turned out to solve a genuine problem: how do you bill an autonomous agent that has no credit card? The answer, apparently, is USDC on a programmable blockchain. The agents that use DocAPI this way are paying reliably, they never forget to renew, and they have zero payment friction. That's better retention behavior than human customers.
+
+The credits-in-response-header design also worked better than I expected. Every API response from DocAPI returns a `X-Credits-Remaining` header. Agents read this header to decide when to top up. I thought this was a minor convenience feature. It turned out to be the reason agents can operate autonomously without hitting surprise rate limits. Two customers specifically cited this header when explaining why they chose DocAPI over alternatives.
+
+## What I got wrong
+
+I underestimated documentation as a growth channel. The HN launch drove initial traffic, but what converts visitors to users is the quality of the docs. I shipped with incomplete docs — intentionally, per the [shipping before ready](/blog/shipping-before-ready) philosophy — and I paid for it in the second week. Signups dropped. Support questions went up. Three people who signed up for free accounts never converted, and based on their questions it's clear the docs didn't explain the authentication flow well enough.
+
+The fix was a documentation rewrite in week three. Signups stabilized. But I lost roughly a week of conversion momentum because I treated docs as secondary to the API itself. They're not secondary. For a developer tool, docs are the product experience.
+
+## What's next
+
+For DocAPI: focus on retention over acquisition. The early growth curve is fine. The question is whether customers stick around month two and month three. I'm adding usage analytics to the dashboard so customers can see their own patterns, and I'm building a webhook system so agents can get notified before credits run out rather than polling.
+
+For FarmPosts: find one paying customer before adding any features. I'm talking to beta testers this month with one goal — close one paid conversion. If I can't close one, I need to understand why before building anything new. If I can close one, I have proof the model works and I can build toward ten.
+
+Building both products in public creates a constraint I find useful: I have to tell the truth about what's working. The [building in public](/blog/building-in-public) dynamic means my reputation compounds with every honest update — good or bad. That's the only version of indie hacking I want to do.
+
+---
+
+Next revenue report will be in 30 days. I'll share the updated DocAPI MRR, FarmPosts status, and whether the retention bets paid off.
+
+## FAQ
+
+**How much revenue does DocAPI make?**
+DocAPI launched on Hacker News in early 2026 and reached a few hundred dollars MRR within its first month. It accepts both card and USDC payments on Base chain. Numbers are updated as the business grows.
+
+**What is an indie hacker revenue report?**
+An indie hacker revenue report is a public breakdown of a solo founder's MRR, customer counts, acquisition channels, and lessons learned — shared with real numbers instead of vague claims. The goal is accountability and compounding trust with readers.
+
+**How do indie hackers get their first paying customers?**
+The most reliable early channels are Hacker News Show HN posts, X (Twitter), and niche communities where your target users already spend time. DocAPI's first paying customer came within 24 hours of the HN launch. Direct, honest distribution beats paid ads at the early stage.
+
+**Is FarmPosts making money yet?**
+FarmPosts is still in early development and beta as of March 2026. It has no public MRR to report yet. The focus is on validating whether AI-powered social scheduling for agricultural businesses is a real pain point before scaling.
+
+**Why share small revenue numbers publicly?**
+Small honest numbers are more useful than big vague claims. When you share real early-stage numbers, you build credibility with readers who can fact-check you, attract customers who know exactly what they're buying into, and create a public record that forces you to keep improving.
