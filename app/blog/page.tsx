@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { getAllPosts, formatDate } from '@/lib/blog';
+import { NewsletterSignup } from '@/components/NewsletterSignup';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -47,6 +48,8 @@ export default function BlogPage() {
         <p className="projects-label">Writing</p>
         <h2 className="blog-heading">Thoughts on building, shipping, and indie hacking.</h2>
       </div>
+
+      <NewsletterSignup variant="inline" />
 
       <section className="blog-list">
         {posts.map((post) => (

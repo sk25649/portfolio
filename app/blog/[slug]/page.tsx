@@ -1,9 +1,9 @@
 import Link from 'next/link';
-import Script from 'next/script';
 import { notFound } from 'next/navigation';
 import { getAllPostSlugs, getPostBySlug, getRelatedPosts, getAdjacentPosts, formatDate } from '@/lib/blog';
 import { MDXContent } from '@/components/blog/MDXContent';
 import { PostTracker } from '@/components/PostTracker';
+import { NewsletterSignup } from '@/components/NewsletterSignup';
 import type { Metadata } from 'next';
 
 interface Props {
@@ -140,18 +140,7 @@ export default async function BlogPostPage({ params }: Props) {
         <MDXContent content={post.content} />
       </article>
 
-      <div className="newsletter-embed">
-        <p className="newsletter-label">Get posts like this every week</p>
-        <Script src="https://subscribe-forms.beehiiv.com/embed.js" strategy="afterInteractive" />
-        <iframe
-          src="https://subscribe-forms.beehiiv.com/41604aa1-d6e6-481d-9ef5-6091088ee022"
-          className="beehiiv-embed"
-          data-test-id="beehiiv-embed"
-          frameBorder={0}
-          scrolling="no"
-          style={{ width: '100%', height: '291px', margin: 0, borderRadius: 0, backgroundColor: 'transparent', boxShadow: 'none' }}
-        />
-      </div>
+      <NewsletterSignup variant="post" />
 
       {related.length > 0 && (
         <section className="related-posts">
