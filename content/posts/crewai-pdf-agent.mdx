@@ -1,0 +1,279 @@
+---
+title: "Generate PDF Reports from CrewAI Agents with DocAPI"
+description: "CrewAI crews are great at multi-agent research and writing — but they can't produce PDFs without extra plumbing. Here's how to wire DocAPI into a CrewAI tool so your crew can generate polished PDF reports autonomously."
+date: "2026-03-17"
+tags: ["AI", "CrewAI", "DocAPI", "Agents"]
+cornerstone: false
+faq:
+  - q: "Can a CrewAI agent generate a PDF without human intervention?"
+    a: "Yes. Wrap DocAPI in a CrewAI tool and any agent in your crew can convert HTML output into a PDF in one call — no browser, no file system, no extra steps."
+  - q: "What is DocAPI?"
+    a: "DocAPI is a PDF generation API built for AI agents. It takes HTML and returns a PDF. It supports self-registration via a single POST, USDC billing on Base, and MCP natively — no email, no OAuth, no dashboard required."
+  - q: "How do I give only one agent in a crew access to the PDF tool?"
+    a: "Assign the tool to the specific agent that handles output. In CrewAI, tools are passed per-agent, so you can give the PDF tool to your 'report writer' agent without exposing it to researcher or analyst agents."
+---
+
+CrewAI shines at multi-agent pipelines. A researcher gathers data, an analyst synthesizes it, a writer turns it into a structured report. Each agent focuses on what it's good at.
+
+The gap comes at the end. The writer agent produces great Markdown or prose — but if you need a PDF to send to a client, share with a team, or drop into an S3 bucket, something has to bridge that gap. Usually that something is a human.
+
+It doesn't have to be.
+
+## The problem with existing PDF options
+
+The instinct is to reach for `reportlab`, `weasyprint`, or `pdfkit`. They work in isolation but they're not agent-friendly:
+
+- They require managing file system paths inside an agent loop
+- Styling is painful, especially for complex layouts
+- None of them are built for autonomous credit management or agentic billing
+- Setting them up means adding heavy system dependencies to your environment
+
+The cleaner pattern: let the writer agent produce HTML (which it does well), then call an API that converts it to a PDF. The agent stays in its lane. The API handles rendering.
+
+## What DocAPI is
+
+[DocAPI](https://docapi.co) is a PDF generation API designed for AI agents. Give it HTML, get back a PDF.
+
+What makes it different from generic PDF APIs:
+
+- **Self-registration via one POST** — no email, no OAuth, no dashboard
+- **Credits on every response** — `X-Credits-Remaining` header so agents can monitor themselves
+- **MCP native** — connect directly to any MCP-compatible framework via [mcp.docapi.co](https://mcp.docapi.co)
+- **Full Chrome rendering** — CSS, fonts, flexbox, grid all work as expected
+- **Fast** — ~10ms cold starts so it doesn't bottleneck your crew
+
+For a CrewAI crew, the workflow is: writer agent produces HTML, calls DocAPI, gets a PDF URL back. The coordinator reports the URL. Done.
+
+## Setup
+
+Install dependencies:
+
+```bash
+pip install crewai crewai-tools docapi-python
+```
+
+Register for an API key programmatically — no email required:
+
+```python
+import requests
+
+res = requests.post("https://docapi.co/api/register")
+data = res.json()
+
+print(data["api_key"])       # save this
+print(data["usdc_address"])  # fund this to add more credits
+print(data["free_calls"])    # 10 free calls to start
+```
+
+Set your keys:
+
+```bash
+export DOCAPI_KEY="dk_your_key_here"
+export OPENAI_API_KEY="sk_your_key_here"
+```
+
+## Create a CrewAI tool for DocAPI
+
+CrewAI tools are classes that inherit from `BaseTool`. Here's a clean DocAPI tool:
+
+```python
+import os
+import requests
+from crewai.tools import BaseTool
+from pydantic import Field
+
+DOCAPI_KEY = os.environ["DOCAPI_KEY"]
+DOCAPI_ENDPOINT = "https://docapi.co/api/pdf"
+
+
+class GeneratePDFTool(BaseTool):
+    name: str = "generate_pdf"
+    description: str = (
+        "Convert an HTML string to a PDF using DocAPI. "
+        "Returns the URL of the generated PDF. "
+        "Use this when the task requires producing a downloadable PDF report."
+    )
+
+    def _run(self, html_content: str) -> str:
+        response = requests.post(
+            DOCAPI_ENDPOINT,
+            headers={
+                "Authorization": f"Bearer {DOCAPI_KEY}",
+                "Content-Type": "application/json",
+            },
+            json={"html": html_content},
+        )
+        response.raise_for_status()
+
+        # Monitor credits — warn when running low
+        credits_remaining = response.headers.get("X-Credits-Remaining")
+        if credits_remaining is not None:
+            remaining = int(credits_remaining)
+            if remaining < 10:
+                print(f"[DocAPI] Warning: only {remaining} credits left. Consider topping up.")
+            else:
+                print(f"[DocAPI] Credits remaining: {remaining}")
+
+        return response.json()["url"]
+```
+
+That's the whole tool. Pass it to any agent that needs to produce PDFs.
+
+## Build the market report crew
+
+Here's a full working crew that researches a company and generates a PDF report:
+
+```python
+import os
+from crewai import Agent, Task, Crew, Process
+from crewai_tools import SerperDevTool
+
+# Import our DocAPI tool from above
+from tools.docapi import GeneratePDFTool
+
+search_tool = SerperDevTool()
+pdf_tool = GeneratePDFTool()
+
+
+# Agent 1: Researcher — finds current data
+researcher = Agent(
+    role="Market Research Analyst",
+    goal="Gather relevant financial data, recent news, and key metrics for a company",
+    backstory=(
+        "You are a senior financial analyst with deep experience in equity research. "
+        "You know how to find the signal in the noise and surface what matters."
+    ),
+    tools=[search_tool],
+    verbose=True,
+    llm="gpt-4o",
+)
+
+# Agent 2: Report Writer — structures the data into HTML and generates a PDF
+writer = Agent(
+    role="Financial Report Writer",
+    goal=(
+        "Take research data and produce a polished HTML report, then call generate_pdf "
+        "to produce a downloadable PDF. Return the PDF URL."
+    ),
+    backstory=(
+        "You write institutional-quality research reports. "
+        "You output clean, well-structured HTML with inline CSS. "
+        "You always call generate_pdf at the end of your work — never return raw text."
+    ),
+    tools=[pdf_tool],
+    verbose=True,
+    llm="gpt-4o",
+)
+
+
+# Task 1: Research
+research_task = Task(
+    description=(
+        "Research {company} ({ticker}). Gather: "
+        "recent news (last 30 days), key financial metrics, competitive position, "
+        "analyst sentiment, and any notable risks or tailwinds. "
+        "Produce a structured summary your writer can work from."
+    ),
+    expected_output="A structured research summary with sections for news, metrics, sentiment, and risks.",
+    agent=researcher,
+)
+
+# Task 2: Write and generate the PDF
+write_task = Task(
+    description=(
+        "Using the research summary, produce a professional HTML report for {company} ({ticker}). "
+        "The HTML should include: title section, executive summary, key metrics, recent news, "
+        "competitive position, risks, and a short outlook. "
+        "Use clean inline CSS: white background, dark text, clear hierarchy, readable fonts. "
+        "Call generate_pdf with the full HTML string. "
+        "Return the PDF URL as your final output."
+    ),
+    expected_output="A PDF URL (e.g. https://docapi.co/files/...) pointing to the generated report.",
+    agent=writer,
+    context=[research_task],
+)
+
+
+crew = Crew(
+    agents=[researcher, writer],
+    tasks=[research_task, write_task],
+    process=Process.sequential,
+    verbose=True,
+)
+
+if __name__ == "__main__":
+    result = crew.kickoff(inputs={"company": "Apple Inc.", "ticker": "AAPL"})
+    print("\nPDF report:", result.raw)
+```
+
+Run it:
+
+```bash
+python crew.py
+```
+
+The researcher gathers data, the writer structures it into HTML and calls `generate_pdf`, and you get back a URL to the finished PDF. The crew never touches the file system.
+
+## What the HTML looks like
+
+Before calling the tool, the writer agent produces something like this:
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: -apple-system, Georgia, serif; max-width: 820px; margin: 48px auto; color: #111; line-height: 1.6; }
+    h1 { font-size: 2rem; border-bottom: 3px solid #111; padding-bottom: 14px; }
+    h2 { font-size: 1.2rem; color: #333; margin-top: 2.5rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .metric-row { display: flex; gap: 2rem; margin: 1.5rem 0; }
+    .metric { flex: 1; }
+    .metric .label { font-size: 0.75rem; text-transform: uppercase; color: #888; }
+    .metric .value { font-size: 1.6rem; font-weight: 700; }
+    blockquote { border-left: 3px solid #ddd; margin: 0; padding-left: 1rem; color: #555; }
+  </style>
+</head>
+<body>
+  <h1>Apple Inc. (AAPL)</h1>
+  <p><strong>Report Date:</strong> March 17, 2026 &nbsp;·&nbsp; <strong>Prepared by:</strong> Market Research Crew</p>
+
+  <h2>Executive Summary</h2>
+  <p>Apple continues to show strong fundamentals driven by services growth and its expanding ecosystem across Vision Pro, Apple Intelligence, and financial products...</p>
+
+  <h2>Key Metrics</h2>
+  <div class="metric-row">
+    <div class="metric"><div class="label">Market Cap</div><div class="value">$3.1T</div></div>
+    <div class="metric"><div class="label">P/E Ratio</div><div class="value">28.4x</div></div>
+    <div class="metric"><div class="label">Revenue TTM</div><div class="value">$395B</div></div>
+  </div>
+
+  <!-- ... risks, outlook, etc. -->
+</body>
+</html>
+```
+
+DocAPI renders it through Chrome and returns a PDF. No Puppeteer setup, no file system juggling.
+
+## Assigning tools per agent
+
+One of CrewAI's strengths is that tools are assigned per-agent, not globally. That means you can:
+
+- Give `SerperDevTool` only to the researcher
+- Give `GeneratePDFTool` only to the writer
+- Add a code executor to an analyst agent without exposing it elsewhere
+
+This keeps each agent focused. The writer doesn't search the web. The researcher doesn't produce PDFs. The crew stays modular.
+
+## What's next
+
+This crew handles the core research-to-PDF loop. Two things extend it further:
+
+**MCP integration.** If you're running Claude Desktop, Cursor, or any MCP-compatible host alongside your crew, point it at [mcp.docapi.co](https://mcp.docapi.co). The PDF tool shows up automatically — no wrapper code needed.
+
+**USDC autopay.** DocAPI supports USDC payments on Base. With Coinbase's AgentKit, you can give the crew a wallet, have it check `X-Credits-Remaining` after each PDF call, and automatically send a topup when the balance gets low. The crew funds itself and keeps running. No babysitting.
+
+---
+
+CrewAI is at its best when each agent has the right tool for its job. DocAPI is the right tool for PDF output — fast, agent-native, and zero setup friction.
+
+Full docs at [docapi.co](https://docapi.co).
