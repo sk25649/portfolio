@@ -23,9 +23,9 @@ const projects = [
   {
     id: "03",
     name: "US Kids Golf Status",
-    url: "https://uskidsgolfstatus.com",
+    url: "https://juniorgolfstatus.com",
     description:
-      "Priority status lookup for US Kids Golf tournaments. Built for junior golfer families.",
+      "Priority status lookup for US Kids Golf tournaments. Built for junior golfer families. 3,000–5,000 visitors a month.",
     tag: "tool",
   },
   {
@@ -43,6 +43,23 @@ const projects = [
     description:
       "3D board games inspired by TV shows. Play vs AI, local co-op, or online multiplayer.",
     tag: "game",
+  },
+];
+
+const instagram = {
+  handle: "@siwan.quest",
+  url: "https://www.instagram.com/siwan.quest",
+};
+
+// Scoreboard strip under the hero. Updated monthly: edit the values below.
+// Marathon: no race or date picked yet, so keep it as "In training".
+const scoreboard = [
+  { label: "Revenue", value: "~$500/mo → goal $10K MRR" },
+  { label: "Marathon", value: "In training" },
+  { label: "Products shipped", value: "5" },
+  {
+    label: "AI agent",
+    value: "Muse — trading, content, and research, with public scorecards",
   },
 ];
 
@@ -145,8 +162,20 @@ export default function Home() {
             <span className="accent">Kim.</span>
           </h1>
           <p className="bio">
-            I build AI tools and write about what actually works.
+            Dad in Los Angeles. Training for a marathon, building my own
+            products to $10K MRR, and running my life with an AI agent in my
+            corner. I post the receipts.
           </p>
+          <TrackedLink
+            href={instagram.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hero-social"
+            eventName="instagram_click"
+            eventProps={{ location: "hero" }}
+          >
+            Instagram: {instagram.handle} <span aria-hidden="true">↗</span>
+          </TrackedLink>
         </div>
 
         <div className="hero-right">
@@ -172,6 +201,38 @@ export default function Home() {
         </div>
       </div>
 
+      {/* Scoreboard strip */}
+      <section className="scoreboard" aria-label="Scoreboard">
+        {scoreboard.map((s) => (
+          <div key={s.label} className="sb-item">
+            <p className="projects-label">{s.label}</p>
+            <p className="sb-value">{s.value}</p>
+          </div>
+        ))}
+      </section>
+
+      {/* Quests */}
+      <section className="quests" aria-label="Quests">
+        <p className="quest-main">
+          Main quest: be a protector and provider for my family.
+        </p>
+        <p className="quest-sub">Side quests, all in public:</p>
+        <ol className="quest-list">
+          <li>
+            <strong>Marathon</strong> — I record every run.
+          </li>
+          <li>
+            <strong>$10K MRR from my own products</strong> — FarmPosts is
+            paying, the rest are climbing.
+          </li>
+          <li>
+            <strong>The AI-run life</strong> — an AI agent helps run my
+            trading, training, building, and content, and I publish what it
+            gets right and wrong.
+          </li>
+        </ol>
+      </section>
+
       {/* Scrolling ticker */}
       <div className="ticker" aria-hidden="true">
         <div className="ticker-track">
@@ -186,6 +247,7 @@ export default function Home() {
 
       {/* Project detail rows */}
       <section className="work">
+        <p className="projects-label work-label">The receipts so far:</p>
         {projects.map((p) => (
           <TrackedLink
             key={p.id}
@@ -241,10 +303,10 @@ export default function Home() {
       {/* Structured About */}
       <section className="about-structured" aria-label="About Siwan Kim">
         <p>
-          Siwan Kim is an indie hacker and software developer who builds AI tools and developer infrastructure.
-          He is the creator of <a href="https://docapi.co">DocAPI</a> (agent-native HTML-to-PDF API) and{' '}
-          <a href="https://farmposts.com">FarmPosts</a> (AI content platform for real estate agents).
-          He writes about agentic API design, shipping products publicly, and career strategy in the AI era.
+          Siwan Kim is a dad and indie builder in Los Angeles. He builds AI products (
+          <a href="https://farmposts.com">FarmPosts</a>, <a href="https://docapi.co">DocAPI</a>, and more),
+          trains for a marathon, and documents the pursuit of $10K MRR with an AI agent helping run the operation
+          — receipts posted in public on <a href={instagram.url}>{instagram.handle}</a>.
         </p>
       </section>
 
