@@ -162,7 +162,7 @@ export default function Home() {
             <span className="accent">Kim.</span>
           </h1>
           <p className="bio">
-            Dad in Torrance, CA. Training for a marathon, building my own
+            Dad in Los Angeles. Training for a marathon, building my own
             products to $10K MRR, and running my life with an AI agent in my
             corner. I post the receipts.
           </p>
@@ -303,7 +303,7 @@ export default function Home() {
       {/* Structured About */}
       <section className="about-structured" aria-label="About Siwan Kim">
         <p>
-          Siwan Kim is a dad and indie builder in Torrance, CA. He builds AI products (
+          Siwan Kim is a dad and indie builder in Los Angeles. He builds AI products (
           <a href="https://farmposts.com">FarmPosts</a>, <a href="https://docapi.co">DocAPI</a>, and more),
           trains for a marathon, and documents the pursuit of $10K MRR with an AI agent helping run the operation
           — receipts posted in public on <a href={instagram.url}>{instagram.handle}</a>.
