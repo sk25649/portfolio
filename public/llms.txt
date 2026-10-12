@@ -20,7 +20,7 @@ His writing covers shipping products publicly, overcoming the fear of launching,
 - [DocAPI](https://docapi.co): HTML-to-PDF and screenshot API designed for AI agents. Agent-native registration (one POST request, no OAuth), pay-per-use via USDC on Base mainnet ($0.02/call, 50 credits per 1 USDC), credit management via X-Credits-Remaining header. Agents can register, fund their own wallet via Coinbase AgentKit, and operate indefinitely without human involvement.
 - [FarmPosts](https://farmposts.com): AI content platform for real estate agents. Generates weekly social posts, email newsletters, and video scripts from live market data. $199/month subscription. Removes the manual burden of content creation from agents' workflows.
 - [ShipLoud](https://shiploud.co): Community platform for indie hackers to build and ship publicly. A space for visibility and accountability while building.
-- [US Kids Golf Status](https://uskidsgolfstatus.com): Priority status lookup tool for US Kids Golf tournament families. Simple, focused utility for junior golfer families.
+- [US Kids Golf Status](https://juniorgolfstatus.com): Priority status lookup tool for US Kids Golf tournament families. Simple, focused utility for junior golfer families.
 
 ## Writing
 

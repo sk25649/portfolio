@@ -114,8 +114,20 @@ h1 .accent {
   font-size: clamp(15px, 1.8vw, 18px);
   color: var(--muted);
   font-weight: 400;
-  max-width: 360px;
+  max-width: 460px;
   line-height: 1.75;
+}
+
+.hero-social {
+  align-self: flex-start;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+  transition: opacity 0.14s ease;
+}
+
+.hero-social:hover {
+  opacity: 0.7;
 }
 
 .hero-right {
@@ -189,6 +201,79 @@ h1 .accent {
   flex-shrink: 0;
 }
 
+/* ─── Scoreboard ──────────────────────────────────────────── */
+.scoreboard {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-bottom: 1px solid var(--border);
+  animation: fadein 0.5s 0.1s ease both;
+}
+
+.sb-item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 28px var(--pad);
+  border-right: 1px solid var(--border);
+}
+
+.sb-item:last-child {
+  border-right: none;
+}
+
+.sb-value {
+  font-size: clamp(15px, 1.6vw, 18px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.4;
+}
+
+/* ─── Quests ──────────────────────────────────────────────── */
+.quests {
+  padding: 40px var(--pad);
+  border-bottom: 1px solid var(--border);
+  animation: fadein 0.5s 0.12s ease both;
+}
+
+.quests > * {
+  max-width: 640px;
+}
+
+.quest-main {
+  font-size: clamp(20px, 2.6vw, 26px);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.3;
+  margin-bottom: 20px;
+}
+
+.quest-sub {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.quest-list {
+  list-style: decimal;
+  margin-left: 1.25em;
+}
+
+.quest-list li {
+  font-size: clamp(14px, 1.7vw, 16px);
+  color: var(--muted);
+  line-height: 1.75;
+  padding-left: 4px;
+  margin-bottom: 6px;
+}
+
+.quest-list strong {
+  color: var(--text);
+  font-weight: 700;
+}
+
 /* ─── Ticker ──────────────────────────────────────────────── */
 .ticker {
   background: var(--accent);
@@ -230,6 +315,11 @@ h1 .accent {
 .work {
   border-bottom: 1px solid var(--border);
   animation: fadein 0.5s 0.15s ease both;
+}
+
+.work-label {
+  padding: 28px var(--pad) 16px;
+  border-bottom: 1px solid var(--border);
 }
 
 .work-item {
@@ -746,6 +836,21 @@ h1 .accent {
   to   { opacity: 1; transform: translateY(0); }
 }
 
+/* ─── Scoreboard: 2 columns on tablets ───────────────────── */
+@media (max-width: 900px) {
+  .scoreboard {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .sb-item:nth-child(2) {
+    border-right: none;
+  }
+
+  .sb-item:nth-child(-n + 2) {
+    border-bottom: 1px solid var(--border);
+  }
+}
+
 /* ─── Mobile — iPhone 12 and similar (≤ 680px) ───────────── */
 @media (max-width: 680px) {
   .blog-item {
@@ -849,6 +954,27 @@ h1 .accent {
 
   .footer-links {
     font-size: 12px;
+  }
+}
+
+/* ─── Scoreboard: single column on phones ────────────────── */
+@media (max-width: 480px) {
+  .scoreboard {
+    grid-template-columns: 1fr;
+  }
+
+  .sb-item {
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    padding: 20px var(--pad);
+  }
+
+  .sb-item:last-child {
+    border-bottom: none;
+  }
+
+  .quests {
+    padding: 32px var(--pad);
   }
 }
 
