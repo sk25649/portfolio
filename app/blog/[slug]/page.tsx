@@ -4,6 +4,8 @@ import { getAllPostSlugs, getPostBySlug, getRelatedPosts, getAdjacentPosts, form
 import { MDXContent } from '@/components/blog/MDXContent';
 import { PostTracker } from '@/components/PostTracker';
 import { NewsletterSignup } from '@/components/NewsletterSignup';
+import { SiteNav } from '@/components/SiteNav';
+import { SiteFooter } from '@/components/SiteFooter';
 import type { Metadata } from 'next';
 
 interface Props {
@@ -41,12 +43,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-const socials = [
-  { label: 'x', url: 'https://x.com/0xSiwan' },
-  { label: 'threads', url: 'https://www.threads.com/@codingbarista' },
-  { label: 'linkedin', url: 'https://www.linkedin.com/in/siwankim/' },
-];
-
 export default async function BlogPostPage({ params }: Props) {
   const { slug } = await params;
   const post = getPostBySlug(slug);
@@ -66,6 +62,7 @@ export default async function BlogPostPage({ params }: Props) {
       name: 'Siwan Kim',
       url: 'https://siwan.io',
       sameAs: [
+        'https://www.instagram.com/siwan.mp4',
         'https://x.com/0xSiwan',
         'https://www.linkedin.com/in/siwankim/',
       ],
@@ -115,17 +112,7 @@ export default async function BlogPostPage({ params }: Props) {
           }}
         />
       )}
-      <nav className="nav">
-        <Link href="/" className="nav-logo">siwan.io</Link>
-        <div className="nav-links">
-          <Link href="/blog">writing</Link>
-          {socials.map((s) => (
-            <a key={s.label} href={s.url} target="_blank" rel="noopener noreferrer">
-              {s.label}
-            </a>
-          ))}
-        </div>
-      </nav>
+      <SiteNav />
 
       <div className="post-hero">
         <p className="post-eyebrow">
@@ -152,7 +139,7 @@ export default async function BlogPostPage({ params }: Props) {
                 <h3 className="bi-title">{p.title}</h3>
                 <p className="bi-desc">{p.description}</p>
               </div>
-              <span className="wi-arrow">→</span>
+              <span className="bi-arrow">→</span>
             </Link>
           ))}
         </section>
@@ -173,19 +160,7 @@ export default async function BlogPostPage({ params }: Props) {
         <Link href="/blog" className="post-back-link">← All posts</Link>
       </div>
 
-      <footer className="footer">
-        <span className="footer-copy">© 2026 siwan kim</span>
-        <div className="footer-links">
-          {socials.map((s, i) => (
-            <span key={s.label}>
-              <a href={s.url} target="_blank" rel="noopener noreferrer">
-                {s.label}
-              </a>
-              {i < socials.length - 1 && <span className="sep"> / </span>}
-            </span>
-          ))}
-        </div>
-      </footer>
+      <SiteFooter />
     </>
   );
 }

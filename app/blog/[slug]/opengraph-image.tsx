@@ -22,7 +22,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
   return new ImageResponse(
     <div
       style={{
-        background: '#FFFFFF',
+        background: '#0B0B0D',
         width: '1200px',
         height: '630px',
         display: 'flex',
@@ -45,7 +45,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
             fontWeight: 800,
             letterSpacing: '0.2em',
             textTransform: 'uppercase',
-            color: '#AAAAAA',
+            color: '#A6A29A',
           }}
         >
           Writing
@@ -55,7 +55,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
             fontSize: 16,
             fontWeight: 800,
             letterSpacing: '-0.02em',
-            color: '#0A0A0A',
+            color: '#F2F0EA',
           }}
         >
           siwan.io
@@ -79,7 +79,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
             fontWeight: 800,
             letterSpacing: '-2px',
             lineHeight: 1.05,
-            color: '#0A0A0A',
+            color: '#F2F0EA',
             maxWidth: '900px',
           }}
         >
@@ -90,7 +90,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
             style={{
               fontSize: 24,
               fontWeight: 800,
-              color: '#888888',
+              color: '#A6A29A',
               lineHeight: 1.5,
               maxWidth: '800px',
             }}
@@ -102,7 +102,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
           style={{
             fontSize: 18,
             fontWeight: 800,
-            color: '#0047FF',
+            color: '#6E93FF',
             letterSpacing: '-0.02em',
             marginTop: '8px',
           }}
@@ -115,7 +115,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
       <div
         style={{
           height: '10px',
-          background: '#0047FF',
+          background: '#6E93FF',
           width: '100%',
           display: 'flex',
         }}

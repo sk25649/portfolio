@@ -1,18 +1,14 @@
 import Link from 'next/link';
 import { getAllPosts, formatDate } from '@/lib/blog';
 import { NewsletterSignup } from '@/components/NewsletterSignup';
+import { SiteNav } from '@/components/SiteNav';
+import { SiteFooter } from '@/components/SiteFooter';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Writing — Siwan Kim',
   description: 'Essays on AI agents, shipping products, career strategy in the AI era, and building in public. By Siwan Kim.',
 };
-
-const socials = [
-  { label: 'x', url: 'https://x.com/0xSiwan' },
-  { label: 'threads', url: 'https://www.threads.com/@codingbarista' },
-  { label: 'linkedin', url: 'https://www.linkedin.com/in/siwankim/' },
-];
 
 const breadcrumbSchema = {
   "@context": "https://schema.org",
@@ -32,17 +28,7 @@ export default function BlogPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
-      <nav className="nav">
-        <Link href="/" className="nav-logo">siwan.io</Link>
-        <div className="nav-links">
-          <Link href="/blog" style={{ color: 'var(--text)' }}>writing</Link>
-          {socials.map((s) => (
-            <a key={s.label} href={s.url} target="_blank" rel="noopener noreferrer">
-              {s.label}
-            </a>
-          ))}
-        </div>
-      </nav>
+      <SiteNav active="writing" />
 
       <div className="blog-header">
         <p className="projects-label">Writing</p>
@@ -73,24 +59,12 @@ export default function BlogPage() {
                 {post.cornerstone && <span className="bi-cornerstone">Essential</span>}
               </p>
             </div>
-            <Link href={`/blog/${post.slug}`} className="wi-arrow" aria-label="Read post">→</Link>
+            <Link href={`/blog/${post.slug}`} className="bi-arrow" aria-label="Read post">→</Link>
           </article>
         ))}
       </section>
 
-      <footer className="footer">
-        <span className="footer-copy">© 2026 siwan kim</span>
-        <div className="footer-links">
-          {socials.map((s, i) => (
-            <span key={s.label}>
-              <a href={s.url} target="_blank" rel="noopener noreferrer">
-                {s.label}
-              </a>
-              {i < socials.length - 1 && <span className="sep"> / </span>}
-            </span>
-          ))}
-        </div>
-      </footer>
+      <SiteFooter />
     </>
   );
 }
