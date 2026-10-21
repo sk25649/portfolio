@@ -4,7 +4,9 @@ import { TrackedLink } from "@/components/TrackedLink";
 import { NewsletterSignup } from "@/components/NewsletterSignup";
 import { SiteNav } from "@/components/SiteNav";
 import { SiteFooter } from "@/components/SiteFooter";
+import { ScoreboardStrip } from "@/components/ScoreboardStrip";
 import { instagram } from "@/lib/site";
+import { episodes } from "@/lib/episodes";
 
 // Statuses reflect only what is publicly verifiable today:
 // FarmPosts is the paying product (~$500/mo, stated on this page);
@@ -221,6 +223,9 @@ export default function Home() {
         </aside>
       </div>
 
+      {/* Live scoreboard strip — the show's running numbers */}
+      <ScoreboardStrip />
+
       {/* Products */}
       <section className="section" id="products" aria-label="Products">
         <div className="section-head">
@@ -260,10 +265,38 @@ export default function Home() {
         </div>
       </section>
 
+      {/* The Show — episodes, newest first */}
+      <section className="section" id="show" aria-label="The Show — episodes">
+        <div className="section-head">
+          <span className="section-index">02</span>
+          <h2 className="section-title">The Show</h2>
+          <span className="section-note">Newest first</span>
+        </div>
+        <div className="ep-cards">
+          {episodes.map((ep) => (
+            <Link key={ep.href} href={ep.href} className="ep-card">
+              <span className="ep-card-top">
+                <span className="ep-card-num">{ep.number}</span>
+                <span className="ep-card-series">{ep.series}</span>
+              </span>
+              <span className="ep-card-cover" aria-hidden="true">
+                <span className="ep-cover-num">{ep.numeral}</span>
+                <span className="ep-cover-brand">@siwan.mp4 — Reel</span>
+              </span>
+              <span className="ep-card-title">{ep.title}</span>
+              <span className="ep-card-line">{ep.oneLiner}</span>
+              <span className="ep-card-meta">
+                {ep.date} · View episode →
+              </span>
+            </Link>
+          ))}
+        </div>
+      </section>
+
       {/* The setup */}
       <section className="section" aria-label="How this runs">
         <div className="section-head">
-          <span className="section-index">02</span>
+          <span className="section-index">03</span>
           <h2 className="section-title">The setup</h2>
           <span className="section-note">One main quest, three side quests</span>
         </div>
@@ -304,7 +337,7 @@ export default function Home() {
       {recentPosts.length > 0 && (
         <section className="section" aria-label="Recent writing">
           <div className="section-head">
-            <span className="section-index">03</span>
+            <span className="section-index">04</span>
             <h2 className="section-title">Writing</h2>
             <Link href="/blog" className="section-link">
               all posts →
