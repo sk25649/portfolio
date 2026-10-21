@@ -32,6 +32,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'weekly',
       priority: 0.8,
     },
+    {
+      url: 'https://siwan.io/ep2',
+      lastModified: new Date('2026-10-20'),
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+    {
+      url: 'https://siwan.io/ep1',
+      lastModified: new Date('2026-10-16'),
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
     ...postEntries,
     ...tagEntries,
   ];
