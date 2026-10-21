@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Syne } from "next/font/google";
+import { Syne, Inter, JetBrains_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 
@@ -10,18 +10,35 @@ const syne = Syne({
   display: "swap",
 });
 
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  weight: ["400", "500", "700"],
+  display: "swap",
+});
+
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
+  themeColor: "#0B0B0D",
 };
+
+const description =
+  "Siwan Kim is a dad of three in Los Angeles building AI products in public — FarmPosts, DocAPI, and US Kids Golf Status — training for a marathon, and posting the receipts on the road to $10K MRR.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://siwan.io"),
   title: "Siwan Kim",
-  description: "Siwan Kim builds AI tools and writes about shipping, agentic APIs, and indie hacking. Founder of DocAPI and FarmPosts.",
+  description,
   openGraph: {
     title: "Siwan Kim",
-    description: "Siwan Kim builds AI tools and writes about shipping, agentic APIs, and indie hacking. Founder of DocAPI and FarmPosts.",
+    description,
     url: "https://siwan.io",
     siteName: "Siwan Kim",
     type: "website",
@@ -43,7 +60,9 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={syne.variable}>
+      <body
+        className={`${syne.variable} ${inter.variable} ${jetbrainsMono.variable}`}
+      >
         {children}
         <Analytics />
       </body>

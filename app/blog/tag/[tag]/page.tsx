@@ -1,5 +1,7 @@
 import Link from 'next/link';
 import { getAllPosts, formatDate } from '@/lib/blog';
+import { SiteNav } from '@/components/SiteNav';
+import { SiteFooter } from '@/components/SiteFooter';
 import type { Metadata } from 'next';
 
 interface Props {
@@ -21,27 +23,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-const socials = [
-  { label: 'x', url: 'https://x.com/0xSiwan' },
-  { label: 'threads', url: 'https://www.threads.com/@codingbarista' },
-  { label: 'linkedin', url: 'https://www.linkedin.com/in/siwankim/' },
-];
-
 export default async function TagPage({ params }: Props) {
   const { tag } = await params;
   const posts = getAllPosts().filter((p) => p.tags.includes(tag));
 
   return (
     <>
-      <nav className="nav">
-        <Link href="/" className="nav-logo">siwan.io</Link>
-        <div className="nav-links">
-          <Link href="/blog">writing</Link>
-          {socials.map((s) => (
-            <a key={s.label} href={s.url} target="_blank" rel="noopener noreferrer">{s.label}</a>
-          ))}
-        </div>
-      </nav>
+      <SiteNav />
 
       <div className="blog-header">
         <p className="projects-label"><Link href="/blog">Writing</Link> / {tag}</p>
@@ -57,7 +45,7 @@ export default async function TagPage({ params }: Props) {
               <p className="bi-desc">{post.description}</p>
               <p className="bi-meta">{post.readingTime}</p>
             </div>
-            <span className="wi-arrow">→</span>
+            <span className="bi-arrow">→</span>
           </Link>
         ))}
         {posts.length === 0 && (
@@ -65,17 +53,7 @@ export default async function TagPage({ params }: Props) {
         )}
       </section>
 
-      <footer className="footer">
-        <span className="footer-copy">© 2026 siwan kim</span>
-        <div className="footer-links">
-          {socials.map((s, i) => (
-            <span key={s.label}>
-              <a href={s.url} target="_blank" rel="noopener noreferrer">{s.label}</a>
-              {i < socials.length - 1 && <span className="sep"> / </span>}
-            </span>
-          ))}
-        </div>
-      </footer>
+      <SiteFooter />
     </>
   );
 }

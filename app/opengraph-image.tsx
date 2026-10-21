@@ -2,11 +2,17 @@ import { ImageResponse } from "next/og";
 import { readFileSync } from "fs";
 import { join } from "path";
 
-export const alt = "Siwan Kim — Builder & Indie Hacker";
+export const alt = "Siwan Kim — Building AI products in public";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-const projects = ["FarmPosts", "DocAPI", "US Kids Golf Status", "ShipLoud"];
+const projects = [
+  { name: "FarmPosts", status: "Paying", color: "#4ADE80" },
+  { name: "US Kids Golf Status", status: "Growing", color: "#F0B95C" },
+  { name: "DocAPI", status: "Live", color: "#6E93FF" },
+  { name: "ShipLoud", status: "Live", color: "#6E93FF" },
+  { name: "PlayEpisodes", status: "Live", color: "#6E93FF" },
+];
 
 export default function Image() {
   const fontBold = readFileSync(
@@ -16,7 +22,7 @@ export default function Image() {
   return new ImageResponse(
     <div
       style={{
-        background: "#FFFFFF",
+        background: "#0B0B0D",
         width: "1200px",
         height: "630px",
         display: "flex",
@@ -39,17 +45,17 @@ export default function Image() {
             fontWeight: 800,
             letterSpacing: "0.2em",
             textTransform: "uppercase",
-            color: "#AAAAAA",
+            color: "#A6A29A",
           }}
         >
-          Portfolio
+          Building in public
         </span>
         <span
           style={{
             fontSize: 16,
             fontWeight: 800,
             letterSpacing: "-0.02em",
-            color: "#0A0A0A",
+            color: "#F2F0EA",
           }}
         >
           siwan.io
@@ -66,7 +72,7 @@ export default function Image() {
           gap: "80px",
         }}
       >
-        {/* Left: name + bio */}
+        {/* Left: name + premise */}
         <div
           style={{
             display: "flex",
@@ -82,25 +88,27 @@ export default function Image() {
               fontWeight: 800,
               letterSpacing: "-4px",
               lineHeight: 0.88,
-              color: "#0A0A0A",
+              color: "#F2F0EA",
               display: "flex",
               flexDirection: "column",
             }}
           >
             <span>Siwan</span>
-            <span style={{ color: "#0047FF" }}>Kim.</span>
+            <span>
+              Kim<span style={{ color: "#6E93FF" }}>.</span>
+            </span>
           </div>
           <div
             style={{
               fontSize: 20,
               fontWeight: 800,
-              color: "#888888",
+              color: "#A6A29A",
               lineHeight: 1.6,
-              maxWidth: 420,
+              maxWidth: 430,
             }}
           >
-            builder and indie hacker. shipping things at the intersection of AI
-            and useful tools.
+            Dad of three in Los Angeles. Building AI products to $10K MRR —
+            and posting the receipts.
           </div>
         </div>
 
@@ -108,20 +116,20 @@ export default function Image() {
         <div
           style={{
             width: "1px",
-            height: "320px",
-            background: "#E8E8E8",
+            height: "340px",
+            background: "#232329",
             flexShrink: 0,
             display: "flex",
           }}
         />
 
-        {/* Right: project list */}
+        {/* Right: the ledger */}
         <div
           style={{
             display: "flex",
             flexDirection: "column",
             gap: "0",
-            width: "420px",
+            width: "430px",
             flexShrink: 0,
           }}
         >
@@ -131,54 +139,68 @@ export default function Image() {
               fontWeight: 800,
               letterSpacing: "0.2em",
               textTransform: "uppercase",
-              color: "#AAAAAA",
-              marginBottom: "20px",
+              color: "#A6A29A",
+              marginBottom: "16px",
             }}
           >
-            Selected Projects
+            The products
           </div>
-          {projects.map((name, i) => (
+          {projects.map((p, i) => (
             <div
               key={i}
               style={{
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
-                padding: "18px 0",
-                borderTop: "1.5px solid #E8E8E8",
+                padding: "13px 0",
+                borderTop: "1.5px solid #232329",
                 borderBottom:
-                  i === projects.length - 1 ? "1.5px solid #E8E8E8" : "none",
+                  i === projects.length - 1 ? "1.5px solid #232329" : "none",
               }}
             >
               <span
                 style={{
-                  fontSize: 24,
+                  fontSize: 22,
                   fontWeight: 800,
                   letterSpacing: "-0.02em",
-                  color: "#0A0A0A",
+                  color: "#F2F0EA",
                 }}
               >
-                {name}
+                {p.name}
               </span>
               <span
                 style={{
-                  fontSize: 22,
-                  color: "#0047FF",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  fontSize: 13,
                   fontWeight: 800,
+                  letterSpacing: "0.14em",
+                  textTransform: "uppercase",
+                  color: p.color,
                 }}
               >
-                →
+                <span
+                  style={{
+                    width: "8px",
+                    height: "8px",
+                    borderRadius: "50%",
+                    background: p.color,
+                    display: "flex",
+                  }}
+                />
+                {p.status}
               </span>
             </div>
           ))}
         </div>
       </div>
 
-      {/* Blue stripe at bottom */}
+      {/* Accent stripe at bottom */}
       <div
         style={{
           height: "10px",
-          background: "#0047FF",
+          background: "#6E93FF",
           width: "100%",
           display: "flex",
         }}
